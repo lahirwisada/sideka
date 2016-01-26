@@ -101,7 +101,7 @@ class C_dusun extends CI_Controller {
 		if($this->session->userdata('logged_in') AND $role == 'Administrator')
 		{
 			$data['nama_desa']= $this->m_dusun->get_desa();
-			$data['page_title'] = 'Tambah DUSUN';
+			$data['page_title'] = 'TAMBAH DUSUN';
 			$data['json_array_nik'] = $this->autocomplete_Nik();			
 			$data['json_array_nama'] = $this->autocomplete_NamaPenduduk();
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
@@ -147,7 +147,8 @@ class C_dusun extends CI_Controller {
 					'id_penduduk' => $id_penduduk		
 				);
 
-			$this->m_dusun->insertDusun($data);	
+			$this->m_dusun->insertDusun($data);
+			$this->session->set_flashdata('message', 'Data berhasil ditambahkan !');
 			redirect('admin/c_dusun','refresh');
 			}			
 			else $this->add();
@@ -167,7 +168,7 @@ class C_dusun extends CI_Controller {
 			$data['json_array_nama'] = $this->autocomplete_NamaPenduduk();
 			$data['nik']	= $this->m_dusun->getNIKByIdPenduduk($data['hasil']->id_penduduk);
 			$data['nama']	= $this->m_dusun->getNamaByIdPenduduk($data['hasil']->id_penduduk);	
-			$data['page_title'] = 'Edit Data Dusun';
+			$data['page_title'] = 'UBAH DUSUN';
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
 			$data['content'] = $this->load->view('dusun/v_ubah', $data, TRUE);
 			
@@ -209,7 +210,8 @@ class C_dusun extends CI_Controller {
 						'id_desa' => $id_desa,
 						'id_penduduk' => $id_penduduk	
 					);			
-				$result = $this->m_dusun->updateDusun(array('id_dusun' => $id_dusun), $data);			
+				$result = $this->m_dusun->updateDusun(array('id_dusun' => $id_dusun), $data);
+				$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');				
 				redirect('admin/c_dusun','refresh');
 			}
 			else

@@ -174,7 +174,7 @@ class C_desa extends CI_Controller {
 			$data['nama_kecamatan'] = $this->m_desa->get_kec();	
 			$data['nik']	= $this->m_desa->getNIKByIdPenduduk($data['hasil']->id_penduduk);
 			$data['nama']	= $this->m_desa->getNamaByIdPenduduk($data['hasil']->id_penduduk);
-			$data['page_title'] = 'Edit Data Desa';
+			$data['page_title'] = 'UBAH DATA DESA';
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
 			$data['content'] = $this->load->view('desa/v_ubah', $data, TRUE);
 			
@@ -225,6 +225,7 @@ class C_desa extends CI_Controller {
 							
 					);		
 				$result = $this->m_desa->updateDesa(array('id_desa' => $id_desa), $data);
+				$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');
 				redirect('admin/c_desa','refresh');
 			}
 			else

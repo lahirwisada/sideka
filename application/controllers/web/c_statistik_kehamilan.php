@@ -7,10 +7,12 @@ class C_statistik_kehamilan extends CI_Controller {
         parent::__construct();
         $this->load->model('statistik/m_kehamilan');
         $this->load->model('m_logo');
-    }  
- 
-   function index()
-    {		
+		$this->load->model('sso/m_sso');
+    }
+	
+	function index()
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);	
 		$data['total_kehamilan'] = $this->m_kehamilan->getKehamilan();		
 		$data['total_kehamilan_resti'] = $this->m_kehamilan->getKehamilanResti('Y');		
 		$data['total_kehamilan_normal'] = $this->m_kehamilan->getKehamilanResti('N');

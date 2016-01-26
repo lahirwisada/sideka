@@ -232,7 +232,7 @@ class C_logo extends CI_Controller {
 				);			
 			$this->m_logo->updateLogo(array('id_logo' => $id_logo), $dataLogo);
 			
-		
+		$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');
 		redirect('admin/c_logo','refresh');
 			
     }

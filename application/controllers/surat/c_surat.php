@@ -356,9 +356,12 @@ class C_surat extends CI_Controller {
 		$role = $session['hasil']->role;
 		if($this->session->userdata('logged_in') AND $role == 'Pengelola Data')
 		{
+			///////////////
+			$data['nomor_max_increment']=$this->m_surat->getNoSuratMaxIncrement();
+			//////////////
 			$data['json_array_nik'] = $this->autocomplete_Nik();			
 			$data['json_array_nama'] = $this->autocomplete_NamaPenduduk();
-			$data['deskripsi_kode_surat']=$this->m_surat->get_kode_surat();
+			$data['deskripsi_kode_surat']=$this->m_surat->get_kode_surat2();
 			$data['nama_pamong']=$this->m_surat->get_pamong();
 			$data['page_title'] = 'Tambah Surat';
 			$data['menu'] = $this->load->view('menu/v_pengelolaData', $data, TRUE);
@@ -375,7 +378,8 @@ class C_surat extends CI_Controller {
 		$tgl_awal= $this->input->post('tgl_awal', TRUE);
 		$tgl_akhir= $this->input->post('tgl_akhir', TRUE);
 		$keterangan = $this->input->post('keperluan', TRUE);
-		$kode_surat = $this->input->post('kode_surat', TRUE);
+		$nomor_surat = $this->input->post('nomor_surat', TRUE);
+		$supra_kode = $this->input->post('supra_kode', TRUE);
 		$kata_penutup = $this->input->post('kata_penutup', TRUE);
 		$nik = $this->input->post('nik', TRUE);	
 		$id_perangkat= $this->input->post('id_perangkat', TRUE);
@@ -384,21 +388,20 @@ class C_surat extends CI_Controller {
 		 $this->form_validation->set_rules('judul_surat', 'Judul Surat', 'required');
 		 $this->form_validation->set_rules('kata_penutup', 'Kata Penutup', 'required');
 		 $this->form_validation->set_rules('keperluan', 'Keperluan', 'required');
-		 if ($this->form_validation->run() == TRUE)
+		if ($this->form_validation->run() == TRUE)
 		{  
-			$nomor_max=$this->m_surat->getNoSuratMax(); //2
-			$nomor_max_increment=$this->m_surat->getNoSuratMaxIncrement();//3
+			//$nomor_max=$this->m_surat->getNoSuratMax(); //2
+			//$nomor_max_increment=$this->m_surat->getNoSuratMaxIncrement();//3
 			
 			$cekNoSurat = $this->m_surat->cekFIleExistByNoSurat($nomor_max_increment);			
 			$id_penduduk = $this->m_surat->getIdPendudukByNIK($nik);			
 			$result['cek_nik'] = $this->m_surat->cekNIKExist($nik);
 			
-			
-			 if ($cekNoSurat == NULL && $result['cek_nik']!=NULL) 
+			if ($cekNoSurat == NULL && $result['cek_nik']!=NULL) 
 			{ 	
 				
-				$supra_kode=$this->m_surat->getSupraKodeSuratById($kode_surat);
-				$nomor_surat=$nomor_max_increment.'/'.$supra_kode.'/'.date('Y');
+				$kode_surat=$this->m_surat->getKodeSuratBySupraKode($supra_kode);
+				$nomor_surat=$nomor_surat.'/'.$supra_kode.'/'.date('Y');
 				
 				$data = array
 				(
@@ -406,7 +409,7 @@ class C_surat extends CI_Controller {
 					'tgl_surat' => date('Y-m-d'),
 					'tgl_awal' => date('Y-m-d',strtotime($tgl_awal)),
 					'tgl_akhir' => date('Y-m-d',strtotime($tgl_akhir)),
-					'nomor_registrasi' => $nomor_max_increment,
+					'nomor_registrasi' => $nomor_surat,
 					'judul_surat' => $judul_surat,
 					'keterangan' => $keterangan,
 					'kata_penutup' => $kata_penutup,

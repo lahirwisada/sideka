@@ -238,7 +238,7 @@ class C_cetak_kk extends CI_Controller {
 		$role = $session['hasil']->role;
 		if($this->session->userdata('logged_in') AND $role == 'Pengelola Data')
 		{
-			$data['page_title'] = 'Cetak Kartu Keluarga';
+			$data['page_title'] = 'CETAK KARTU KELUARGA';
 			$data['json_array'] = $this->autocomplete_KepalaKeluarga();	
 			$data['menu'] = $this->load->view('menu/v_pengelolaData', $data, TRUE);
 			$data['content'] = $this->load->view('keluarga/v_cetak_kk', $data, TRUE);		

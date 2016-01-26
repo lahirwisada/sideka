@@ -7,12 +7,12 @@ class C_statistik_raskin extends CI_Controller {
         parent::__construct();
         $this->load->model('statistik/m_raskin');
         $this->load->model('m_logo');
-
-
-    }  
- 
-   function index()
-    {	
+ 		$this->load->model('sso/m_sso');
+    }
+	
+	function index()
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);
 		$data['menerimaSangatMiskin'] 	=  $this->m_raskin->getMenerimaBantuanByKelasSosial('4','is_raskin');
 		$data['menerimaMiskin'] 		=  $this->m_raskin->getMenerimaBantuanByKelasSosial('3','is_raskin');
 		$data['menerimaSedang'] 		=  $this->m_raskin->getMenerimaBantuanByKelasSosial('2','is_raskin');

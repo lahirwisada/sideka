@@ -7,10 +7,12 @@ class C_statistik_buruh_migran extends CI_Controller {
         parent::__construct();
         $this->load->model('statistik/m_buruh_migran');
         $this->load->model('m_logo');
-    }  
-
-   function index()
-    {	
+		$this->load->model('sso/m_sso');
+    }
+	
+	function index()
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);	
 		$data['jumlah_buruh_migran_perempuan'] 	= $this->m_buruh_migran->getTotalBuruhMigranByJenisKelamin('2');
 		$data['jumlah_buruh_migran_laki'] 		= $this->m_buruh_migran->getTotalBuruhMigranByJenisKelamin('1');
 		

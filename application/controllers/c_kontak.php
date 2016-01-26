@@ -115,15 +115,16 @@ class C_kontak extends CI_Controller {
 		$email = $this->input->post('email', TRUE);
 		$pesan = $this->input->post('pesan', TRUE);		
 		
-		$realPerson = $this->input->post('aunt', TRUE);		
-		$realPersonHash = $this->input->post('auntHash', TRUE);		
+		//$realPerson = $this->input->post('aunt', TRUE);		
+		//$realPersonHash = $this->input->post('auntHash', TRUE);		
 		
 		$this->form_validation->set_rules('nama', 'Nama', 'required');				
 		$this->form_validation->set_rules('pesan', 'Pesan', 'required');
 		
 		if ($this->form_validation->run() == TRUE)
 		{		
-			if ($this->rpHash($realPerson) == $realPersonHash) {
+			//if ($this->rpHash($realPerson) == $realPersonHash) {}
+			
 				$email2=$this->cekNull($email);
 				$data = array(
 					'nama' => $nama,
@@ -134,12 +135,12 @@ class C_kontak extends CI_Controller {
 				$this->m_kontak->insertKontak($data);	
 				echo true;
 				//echo "bener";
-				}
-			else 
+				
+			/* else 
 			{
 				echo false;
 					//echo "salah";
-			}
+			} */
         }
 		else { redirect('web/c_home','refresh'); return false;}
     }

@@ -151,7 +151,7 @@ class C_provinsi extends CI_Controller {
 		{
 			$data['hasil'] = $this->m_provinsi->getProvinsiByIdprov($id);
 					
-			$data['page_title'] = 'Edit Data Provinsi';
+			$data['page_title'] = 'UBAH PROVINSI';
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
 			$data['content'] = $this->load->view('provinsi/v_ubah', $data, TRUE);
 		
@@ -184,6 +184,7 @@ class C_provinsi extends CI_Controller {
 			);
 	
 		  	$result = $this->m_provinsi->updateProvinsi(array('id_provinsi' => $id_provinsi), $data);
+			$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');
 			
 			
 		  	redirect('admin/c_provinsi','refresh');

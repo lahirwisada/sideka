@@ -107,7 +107,7 @@ class C_rt extends CI_Controller {
 			$data['nama_dusun']= $this->m_rt->get_dusun();
 			$data['json_array_nik'] = $this->autocomplete_Nik();			
 			$data['json_array_nama'] = $this->autocomplete_NamaPenduduk();
-			$data['page_title'] = 'Tambah RT';
+			$data['page_title'] = 'TAMBAH RT';
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
 			$data['content'] = $this->load->view('rt/v_tambah', $data, TRUE);
 			
@@ -146,7 +146,8 @@ class C_rt extends CI_Controller {
 					'id_penduduk' => $id_penduduk
 				);
 
-			$this->m_rt->insertRt($data);	
+			$this->m_rt->insertRt($data);
+			$this->session->set_flashdata('message', 'Data berhasil ditambahkan !');			
 			redirect('admin/c_rt','refresh');
 			}			
 			else $this->add();
@@ -178,7 +179,7 @@ class C_rt extends CI_Controller {
 			$id_dusun = $data['id_dusun_selected'];
 			$data['nomor_rw'] = $this->m_rt->get_rw_dinamic($id_dusun);
 			
-			$data['page_title'] = 'Edit Data RT';
+			$data['page_title'] = 'UBAH RT';
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
 			$data['content'] = $this->load->view('rt/v_ubah', $data, TRUE);
 			
@@ -216,7 +217,7 @@ class C_rt extends CI_Controller {
 					);
 		
 				$result = $this->m_rt->updateRt(array('id_rt' => $id_rt), $data);
-				
+				$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');
 				redirect('admin/c_rt','refresh');
 			}
 			else

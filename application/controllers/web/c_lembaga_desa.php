@@ -8,10 +8,12 @@ class C_lembaga_desa extends CI_Controller {
 		parent::__construct();
 		$this->load->model('m_lembaga_desa');
 		$this->load->model('m_logo');
+		$this->load->model('sso/m_sso');
     }
 	
 	function index()
-    {		
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);	
 		/* $data['lembaga_desa'] = $this->m_lembaga_desa->getLembaga_desaByIdlembaga('1');
 		$data['menu'] = $this->load->view('web/menu/lembaga_desa', $data, TRUE);
 		$temp['content'] = $this->load->view('web/lembaga_desa',$data,TRUE);

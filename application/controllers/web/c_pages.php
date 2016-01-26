@@ -8,11 +8,12 @@ class C_pages extends CI_Controller {
 		$this->load->helper('text');
 		$this->load->helper('url');
 		$this->load->model('m_logo');
-		
+		$this->load->model('sso/m_sso');
     }
-	
+		
 	function search($search_terms = '', $start = 0)
 	{
+		$data['data_sso'] = $this->m_sso->getSso(1);
 		// If the form has been submitted, rewrite the URL so that the search
 		// terms can be passed as a parameter to the action. Note that there
 		// are some issues with certain characters here.

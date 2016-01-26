@@ -8,10 +8,12 @@ class C_demografi extends CI_Controller {
 		parent::__construct();
 		$this->load->model('m_demografi');
 		$this->load->model('m_logo');
+		$this->load->model('sso/m_sso');
     }
 	
 	function index()
-    {		
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);		
 		$data['demografi'] = $this->m_demografi->getDemografiByIddemografi('1');
 	
 		$data['penduduk'] = $this->m_demografi->getKependudukan();

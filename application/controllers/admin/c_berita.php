@@ -135,7 +135,7 @@ class C_berita extends CI_Controller {
 		$data = base64_decode($img);		
 		
 		
-		$namaFile = str_replace(' ', '+', $judul);
+		$namaFile = sha1(date("Y-m-d H:i:s").'ajengtindakpundi?');
 		$file = UPLOAD_DIR . $namaFile . '.jpg';
 		$success = file_put_contents($file, $data);
 		
@@ -159,7 +159,7 @@ class C_berita extends CI_Controller {
 			);
 			$this->m_pages->insertPages($dataPages);
 			
-			
+			$this->session->set_flashdata('message', 'Data berhasil ditambahkan !');
 			redirect('admin/c_berita','refresh');
         }
 		else $this->add();
@@ -204,7 +204,7 @@ class C_berita extends CI_Controller {
 		$data = base64_decode($img);		
 		
 		
-		$namaFile = str_replace(' ', '+', $judulB);
+		$namaFile = sha1(date("Y-m-d H:i:s").'ajengtindakpundi?');
 		$file = UPLOAD_DIR . $namaFile . '.jpg';
 		$success = file_put_contents($file, $data);
 		
@@ -226,7 +226,7 @@ class C_berita extends CI_Controller {
 				'content' => $berita	
 			);
 			$result = $this->m_pages->updatePages(array('url' => $url.$idb), $dataPages);
-			
+			$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');
 			redirect('admin/c_berita','refresh');
 		}
 		else $this->edit($idb);
@@ -239,7 +239,8 @@ class C_berita extends CI_Controller {
         foreach($post as $id){
             $urlx=$url.$id;
             $this->m_pages->deletePages($urlx);
-            $this->m_berita->deleteBerita($id);
+            $gambar = $this->m_berita->getGambarByIdBerita($id);
+            $this->m_berita->deleteBerita($id,$gambar);
 	    		
             $sucess++;
         }

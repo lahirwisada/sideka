@@ -7,10 +7,12 @@ class C_statistik_pendidikan extends CI_Controller {
         parent::__construct();
         $this->load->model('statistik/m_pendidikan');
         $this->load->model('m_logo');
-    }  
-
-   function index()
-    {	
+		$this->load->model('sso/m_sso');
+    }
+	
+	function index()
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);
 		////////////////////////////////////////////////////////
 		$pendidikan[] = $this->m_pendidikan->getDataPendidikan();		  
 		$json = json_encode($pendidikan);	

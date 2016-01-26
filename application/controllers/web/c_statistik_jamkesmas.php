@@ -7,10 +7,12 @@ class C_statistik_jamkesmas extends CI_Controller {
         parent::__construct();
         $this->load->model('statistik/m_jamkesmas');
         $this->load->model('m_logo');
-    }  
- 
-   function index()
-    {	
+		$this->load->model('sso/m_sso');
+    }
+	
+	function index()
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);	
 		$data['menerimaSangatMiskin'] 	=  $this->m_jamkesmas->getMenerimaBantuanByKelasSosial('4','is_jamkesmas');
 		$data['menerimaMiskin'] 		=  $this->m_jamkesmas->getMenerimaBantuanByKelasSosial('3','is_jamkesmas');
 		$data['menerimaSedang'] 		=  $this->m_jamkesmas->getMenerimaBantuanByKelasSosial('2','is_jamkesmas');

@@ -92,7 +92,7 @@ class C_kabkota extends CI_Controller {
 		if($this->session->userdata('logged_in') AND $role == 'Administrator')
 		{
 			$data['nama_provinsi']=$this->m_kabkota->get_provinsi();
-			$data['page_title'] = 'Tambah Kabupaten Kota';
+			$data['page_title'] = 'TAMBAH KABUPATEN KOTA';
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
 			$data['content'] = $this->load->view('kabkota/v_tambah', $data, TRUE);
 								
@@ -148,7 +148,7 @@ class C_kabkota extends CI_Controller {
 		{
 			$data['hasil'] = $this->m_kabkota->getKabkotaByIdkabkota($id);
 			$data['nama_provinsi']=$this->m_kabkota->get_provinsi();		
-			$data['page_title'] = 'Edit Data Kabupaten Kota';
+			$data['page_title'] = 'UBAH KABUPATEN KOTA';
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
 			$data['content'] = $this->load->view('kabkota/v_ubah', $data, TRUE);
 			
@@ -183,6 +183,7 @@ class C_kabkota extends CI_Controller {
 			);
 	
 			$result = $this->m_kabkota->updateKabkota(array('id_kab_kota' => $id_kab_kota), $data);
+			$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');
 			
 			redirect('admin/c_kabkota','refresh');			
 		}

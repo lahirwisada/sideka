@@ -245,8 +245,8 @@ class C_slider_beranda extends CI_Controller {
 			$config['image_library'] = 'gd2';
 			$config['source_image'] = $upload_konten_background['full_path'];
 			$config['maintain_ratio'] = TRUE;
-			$config['width']     = 200;
-			$config['height']   = 125;
+			$config['width']     = 570;
+			$config['height']   = 225;
 			$this->load->library('image_lib', $config); 
 			$path_konten_background = "uploads/web/slider_beranda/".$upload_konten_background['file_name'];
 		}
@@ -284,6 +284,7 @@ class C_slider_beranda extends CI_Controller {
 				'konten_teks' => $konten_teks
 				);	
 		$this->m_slider_beranda->updateSliderBeranda(array('id_slider_beranda' => $id_slider_beranda), $dataSliderBeranda);
+		$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');
 		redirect('admin/c_slider_beranda','refresh');
 		}
 		else $this->edit($id_slider_beranda);
@@ -294,7 +295,9 @@ class C_slider_beranda extends CI_Controller {
         $post = explode(",", $this->input->post('items'));
         array_pop($post); $sucess=0;
         foreach($post as $id){
-            $this->m_slider_beranda->deleteSliderBeranda($id);
+			$background = $this->m_slider_beranda->getKontenBackgroundByIdSliderBeranda($id);
+			$logo = $this->m_slider_beranda->getKontenLogoByIdSliderBeranda($id);			
+            $this->m_slider_beranda->deleteSliderBeranda($id,$background,$logo);
             $sucess++;
         }
 		

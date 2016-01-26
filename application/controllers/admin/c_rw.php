@@ -98,7 +98,7 @@ class C_rw extends CI_Controller {
 			$data['nama_dusun']= $this->m_rw->get_dusun();
 			$data['json_array_nik'] = $this->autocomplete_Nik();			
 			$data['json_array_nama'] = $this->autocomplete_NamaPenduduk();
-			$data['page_title'] = 'Tambah RW';
+			$data['page_title'] = 'TAMBAH RW';
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
 			$data['content'] = $this->load->view('rw/v_tambah', $data, TRUE);
 							
@@ -134,7 +134,8 @@ class C_rw extends CI_Controller {
 					'id_penduduk' => $id_penduduk
 				);
 
-			$this->m_rw->insertRw($data);	
+			$this->m_rw->insertRw($data);
+			$this->session->set_flashdata('message', 'Data berhasil ditambahkan !');
 			redirect('admin/c_rw','refresh');
 			}			
 			else $this->add();
@@ -154,7 +155,7 @@ class C_rw extends CI_Controller {
 			$data['json_array_nama'] = $this->autocomplete_NamaPenduduk();
 			$data['nik']	= $this->m_rw->getNIKByIdPenduduk($data['hasil']->id_penduduk);
 			$data['nama']	= $this->m_rw->getNamaByIdPenduduk($data['hasil']->id_penduduk);	
-			$data['page_title'] = 'Edit Data RW';
+			$data['page_title'] = 'UBAH RW';
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
 			$data['content'] = $this->load->view('rw/v_ubah', $data, TRUE);
 			
@@ -191,7 +192,8 @@ class C_rw extends CI_Controller {
 						'id_penduduk' => $id_penduduk	
 					);
 		
-				$result = $this->m_rw->updateRw(array('id_rw' => $id_rw), $data);				
+				$result = $this->m_rw->updateRw(array('id_rw' => $id_rw), $data);
+				$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');				
 				redirect('admin/c_rw','refresh');
 			}
 			else

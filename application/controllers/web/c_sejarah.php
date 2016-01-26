@@ -9,10 +9,12 @@ class C_sejarah extends CI_Controller {
 		$this->load->model('m_sejarah');
 		$this->load->model('m_logo');
 		$this->load->helper('text');
+		$this->load->model('sso/m_sso');
     }
 	
 	function index()
-    {		
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);	
 		/* $data['sejarah'] = $this->m_sejarah->getSejarahByIdsejarah('1');
 		//$data['sejarah'] = $this->m_sejarah->get_sejarah();
 		$data['menu'] = $this->load->view('web/menu/sejarah', $data, TRUE);

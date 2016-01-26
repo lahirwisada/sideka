@@ -183,7 +183,7 @@ class C_demografi extends CI_Controller {
 			);
 			$result = $this->m_pages->updatePages(array('url' => $url), $dataPages);
 			/////////////////////////////////////
-
+		$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');
 		redirect('admin/c_demografi','refresh');
 		
     }

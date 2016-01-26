@@ -138,17 +138,10 @@ class C_perangkat extends CI_Controller {
 			$niap = $this->input->post('niap', TRUE);
 			$no_sk_angkat = $this->input->post('no_sk_angkat', TRUE);
 			$tgl_angkat = $this->input->post('tgl_angkat', TRUE);
-			$id_pangkat_gol = $this->input->post('id_pangkat_gol', TRUE);
-			$no_sk_berhenti = $this->input->post('no_sk_berhenti', TRUE);
+			$id_pangkat_gol = $this->input->post('id_pangkat_gol', TRUE);			
 			
-			$tgl_berhenti = $this->input->post('tgl_berhenti', TRUE);
-			if($tgl_berhenti == null)
-			{
-				$tgl_berhenti = null;
-			}
-			else{
-			$tgl_berhenti = date('Y-m-d',strtotime($tgl_berhenti));
-			}
+			$tgl_berhenti = date('Y-m-d',strtotime("+5 year"));
+			
 			
 			$id_jabatan = $this->input->post('id_jabatan', TRUE);
 			$nik = $this->input->post('nik', TRUE);
@@ -176,7 +169,6 @@ class C_perangkat extends CI_Controller {
 						'no_sk_angkat' => $no_sk_angkat,
 						'tgl_angkat' => date('Y-m-d',strtotime($tgl_angkat)),
 						'id_pangkat_gol' => $id_pangkat_gol,
-						'no_sk_berhenti' => $no_sk_berhenti,
 						'tgl_berhenti' => $tgl_berhenti,
 						'id_jabatan' => $id_jabatan,
 						'id_penduduk' => $id_penduduk,

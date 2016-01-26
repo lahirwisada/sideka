@@ -137,7 +137,8 @@ class C_regulasi extends CI_Controller {
 				'isi_regulasi' => $isi_regulasi,
 				'file_regulasi' => $path_file_regulasi,
 			);
-			$this->m_regulasi->insertRegulasi($data);	
+			$this->m_regulasi->insertRegulasi($data);
+			$this->session->set_flashdata('message', 'Data berhasil ditambahkan !');			
 			redirect('admin/c_regulasi','refresh');
         }
 		else $this->add();
@@ -198,6 +199,7 @@ class C_regulasi extends CI_Controller {
 				'file_regulasi' => $path_file_regulasi,
 			);
 			$this->m_regulasi->updateRegulasi(array('id_regulasi' => $id_regulasi), $data);
+			$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');
 			redirect('admin/c_regulasi','refresh');
         }
 		else $this->edit($id_regulasi);

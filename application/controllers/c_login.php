@@ -25,7 +25,27 @@ class C_login extends CI_Controller {
 			{
 				redirect('c_pengelolaData/');
 			}
-			
+			else
+			if($role['role']->role == 'Pengelola Aset')
+			{
+				redirect('aset/c_pengelolaAset/');
+			}
+			else
+			if($role['role']->role == 'Pengelola Peta')
+			{
+				redirect('peta/c_pengelolaPeta/');
+			}
+			else
+			if($role['role']->role == 'Perencana Pembangunan')
+			{
+				redirect('rencanaPembangunan/c_rencanaPembangunan/');
+			}
+
+			else
+			if($role['role']->role == 'Pengelola Sensus')
+			{
+				redirect('c_pemetaankemiskinan');
+			}
 		}
 		else{
 				$data['cek'] = '1';

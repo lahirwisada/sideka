@@ -9,11 +9,12 @@ class C_regulasi extends CI_Controller {
 		$this->load->helper('download');
 		$this->load->model('m_logo');
 		$this->load->model('m_regulasi');
-		
+		$this->load->model('sso/m_sso');
     }
 	
 	function index()
-    {		
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);	
      	$data['konten_logo'] = $this->m_logo->getLogo();
 		$data['regulasi'] = $this->m_regulasi->getRegulasi();
 		$data['base_url'] = $this->config->item('base_url');

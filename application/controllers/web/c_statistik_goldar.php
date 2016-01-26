@@ -7,10 +7,12 @@ class C_statistik_goldar extends CI_Controller {
         parent::__construct();
         $this->load->model('statistik/m_goldar');
         $this->load->model('m_logo');
-    }  
-
-   function index()
-    {	
+		$this->load->model('sso/m_sso');
+    }
+	
+	function index()
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);	
 		////////////////////////////////////////////////////////
 		$goldar[] = $this->m_goldar->getDataGoldar();		  
 		$json = json_encode($goldar);	

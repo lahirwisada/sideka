@@ -8,10 +8,12 @@ class C_rt_rw extends CI_Controller {
 		parent::__construct();
 		$this->load->model('m_lembaga_desa');
 		$this->load->model('m_logo');
+		$this->load->model('sso/m_sso');
     }
 	
 	function index()
-    {		
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);		
 		$data['konten_logo'] = $this->m_logo->getLogo();
 		$data['ketua_RW'] = $this->m_lembaga_desa->getKetuaRW();
 		$data['ketua_RT'] = $this->m_lembaga_desa->getKetuaRT();

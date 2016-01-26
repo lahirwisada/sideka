@@ -153,7 +153,7 @@ class C_kec extends CI_Controller {
 		{		
 			$data['hasil'] = $this->m_kec->getKecByIdkec($id);
 			$data['nama_kab_kota'] = $this->m_kec->get_kab_kota();		
-			$data['page_title'] = 'Edit Data Kecamatan';
+			$data['page_title'] = 'UBAH KECAMATAN';
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
 			$data['content'] = $this->load->view('kec/v_ubah', $data, TRUE);
 			
@@ -188,6 +188,7 @@ class C_kec extends CI_Controller {
 					'id_kab_kota' => $id_kab_kota
 				);		
 				$result = $this->m_kec->updateKec(array('id_kecamatan' => $id_kecamatan), $data);
+				$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');
 							
 				redirect('admin/c_kec','refresh');
 				

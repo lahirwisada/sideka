@@ -10,11 +10,13 @@ class C_berita extends CI_Controller {
 		$this->load->model('m_logo');
 		$this->load->helper('text');
 		$this->load->library('pagination');
+		$this->load->model('sso/m_sso');
     }
 	
 	function index()
-    {		
-    		$data['konten_logo'] = $this->m_logo->getLogo();
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);
+    	$data['konten_logo'] = $this->m_logo->getLogo();
 		$data['berita'] = $this->m_berita->get_recent_berita_all();
 		
 		//pagination
@@ -55,6 +57,7 @@ class C_berita extends CI_Controller {
 	}
 	
 	function get_detail_berita($id){
+		$data['data_sso'] = $this->m_sso->getSso(1);
 		$data['konten_logo'] = $this->m_logo->getLogo();
 		/* $data['berita'] = $this->m_berita->getBeritaByIdberita($id);
 		$data['menu'] = $this->load->view('web/menu/berita', $data, TRUE);		

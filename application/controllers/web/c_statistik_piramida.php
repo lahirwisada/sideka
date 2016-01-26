@@ -7,10 +7,12 @@ class C_statistik_piramida extends CI_Controller {
         parent::__construct();
         $this->load->model('statistik/m_piramida');
         $this->load->model('m_logo');
-    }  
- 
-   function index()
+		$this->load->model('sso/m_sso');
+    }
+	
+	function index()
     {
+		$data['data_sso'] = $this->m_sso->getSso(1);
 		
 		$json_laki 			= $this->getDataDataUmur('1');	
 		$json_perempuan 	= $this->getDataDataUmur('2');
@@ -27,6 +29,7 @@ class C_statistik_piramida extends CI_Controller {
 		$data['totalLaki']			= $this->m_piramida->getDataLaki();
 		$data['totalPerempuan']		= $this->m_piramida->getDataPerempuan();
 		$data['totalPenduduk']		= $this->m_piramida->getDataTotal();
+		
 		$data['konten_logo'] = $this->m_logo->getLogo();
 		$data['logo'] = $this->load->view('v_logo', $data, TRUE);		
 		$data['menu'] = $this->load->view('v_navbar', $data, TRUE);				

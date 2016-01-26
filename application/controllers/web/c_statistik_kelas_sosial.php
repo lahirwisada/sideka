@@ -7,10 +7,12 @@ class C_statistik_kelas_sosial extends CI_Controller {
         parent::__construct();
         $this->load->model('statistik/m_kelas_sosial');
         $this->load->model('m_logo');
-    }  
-
-   function index()
-    {	
+		$this->load->model('sso/m_sso');
+    }
+	
+	function index()
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);
 		$data['jumlah_sangat_miskin'] 	= $this->m_kelas_sosial->getKeluargaByIdKelasSosial('4');
 		$data['jumlah_miskin'] 			= $this->m_kelas_sosial->getKeluargaByIdKelasSosial('3');
 		$data['jumlah_sedang'] 			= $this->m_kelas_sosial->getKeluargaByIdKelasSosial('2');

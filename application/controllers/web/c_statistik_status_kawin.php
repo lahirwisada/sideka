@@ -7,10 +7,12 @@ class C_statistik_status_kawin extends CI_Controller {
         parent::__construct();
         $this->load->model('statistik/m_status_kawin');
         $this->load->model('m_logo');
-    }  
-
-   function index()
-    {	
+		$this->load->model('sso/m_sso');
+    }
+	
+	function index()
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);
 		////////////////////////////////////////////////////////
 		$status_kawin[] = $this->m_status_kawin->getDataStatusKawin();		  
 		$json = json_encode($status_kawin);	

@@ -7,10 +7,13 @@ class C_statistik_pkh extends CI_Controller {
         parent::__construct();
         $this->load->model('statistik/m_pkh');
         $this->load->model('m_logo');
-    }  
- 
-   function index()
-    {	
+ 		$this->load->model('sso/m_sso');
+		$this->load->model('sso/m_sso');
+    }
+	
+	function index()
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);
 		$data['menerimaSangatMiskin'] 	=  $this->m_pkh->getMenerimaBantuanByKelasSosial('4','is_pkh');
 		$data['menerimaMiskin'] 		=  $this->m_pkh->getMenerimaBantuanByKelasSosial('3','is_pkh');
 		$data['menerimaSedang'] 		=  $this->m_pkh->getMenerimaBantuanByKelasSosial('2','is_pkh');

@@ -7,10 +7,12 @@ class C_statistik_bsm extends CI_Controller {
         parent::__construct();
         $this->load->model('statistik/m_bsm');
         $this->load->model('m_logo');
-    }  
-
-   function index()
-    {	
+		$this->load->model('sso/m_sso');
+    }
+	
+	function index()
+    {
+		$data['data_sso'] = $this->m_sso->getSso(1);	
 		$data['jumlah_bsm_perempuan'] 	= $this->m_bsm->getTotalBsmByJenisKelamin('2');
 		$data['jumlah_bsm_laki'] 		= $this->m_bsm->getTotalBsmByJenisKelamin('1');
 		

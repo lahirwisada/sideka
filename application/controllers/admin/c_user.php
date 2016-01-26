@@ -103,7 +103,7 @@ class C_user extends CI_Controller {
 		{
 			$data['json_array_nik'] = $this->autocomplete_Nik();			
 			$data['json_array_nama'] = $this->autocomplete_NamaPenduduk();
-			$data['page_title'] = 'Tambah Pengguna';
+			$data['page_title'] = 'TAMBAH PENGGUNA';
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
 			$data['content'] = $this->load->view('user/v_tambah', $data, TRUE);		
 			$this->load->view('utama', $data);
@@ -145,14 +145,14 @@ class C_user extends CI_Controller {
 				);
 	
 				$this->m_user->insertUser($data);
-				//$this->session->set_flashdata('message', '1 data berhasil ditambahkan.');
+				$this->session->set_flashdata('message', 'Data berhasil ditambahkan !');
 				redirect('admin/c_user');
 			}
 			else
 			{
 				
-			//	$this->session->set_flashdata('exist', 'username sudah ada.');
-				$this->add();
+				$this->session->set_flashdata('exist', 'Username sudah digunakan.');
+				redirect('admin/c_user');
 			}	
         }
 		else $this->add();
@@ -165,7 +165,7 @@ class C_user extends CI_Controller {
 		{
 			$data['hasil'] = $this->m_user->getUserByIdPengguna($id);
 					
-			$data['page_title'] = 'Edit Data Pengguna';
+			$data['page_title'] = 'UBAH PENGGUNA';
 			$data['menu'] = $this->load->view('menu/v_admin', $data, TRUE);
 			$data['content'] = $this->load->view('user/v_ubah', $data, TRUE);
 			
@@ -199,7 +199,7 @@ class C_user extends CI_Controller {
 				);
 	
 				$result = $this->m_user->updateUser(array('id_pengguna' => $id_pengguna), $data);
-				$this->session->set_flashdata('message', '1 data berhasil diubah.');
+				$this->session->set_flashdata('message', 'Ubah data berhasil dilakukan !');
 				redirect('admin/c_user');
 		}		
 		else{$this->edit($id);}
