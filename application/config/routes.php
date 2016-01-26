@@ -39,7 +39,7 @@
 */
 
 $route['default_controller'] = "web/c_home";
-$route['404_override'] = '';
+$route['404_override'] = 'c_error';
 
 
 /* End of file routes.php */
