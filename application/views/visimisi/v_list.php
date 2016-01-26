@@ -72,6 +72,6 @@ $( document ).ready(function() {
 });
 </script>
 
-<h2><?= $page_title ?></h2>
+<h3><?= $page_title ?></h3>
 
 <table id="flex1" style="display:none"></table>

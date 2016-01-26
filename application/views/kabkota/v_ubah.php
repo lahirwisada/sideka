@@ -1,4 +1,4 @@
-<h2><?= $page_title ?></h2>
+<h3><?= $page_title ?></h3>
 
 <?php $flashmessage = $this->session->flashdata('exist');
 	echo ! empty($flashmessage) ? '<p class="message">' . $flashmessage . '</p>': ''; ?>

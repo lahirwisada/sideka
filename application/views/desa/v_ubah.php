@@ -1,4 +1,4 @@
-<h2><?= $page_title ?></h2>
+<h3><?= $page_title ?></h3>
 
 <?php $flashmessage = $this->session->flashdata('exist');
 	echo ! empty($flashmessage) ? '<p class="message">' . $flashmessage . '</p>': ''; ?>
@@ -77,7 +77,7 @@
     <div class="form-group">
       <label class="col-md-3 control-label" for="nik_nama">Pencarian Data Kepala Desa</label>  
       <div class="col-md-9">
-      <input id="nik_nama" name="nik_nama" type="text" placeholder="NIK / Nama Penduduk" class="form-control input-md"value="<?= $nik .' / ' . $nama?>" >
+      <input id="nik_nama" name="nik_nama" type="text" placeholder="NIK / Nama Penduduk" class="form-control input-md" value="<?php if($nik!==null){ echo $nik .' | ' . $nama;}?>" >
       <span class="help-block"><?php echo form_error('nik_nama', '<p class="field_error">','</p>')?></span>  
       </div>
     </div>

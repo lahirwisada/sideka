@@ -15,8 +15,8 @@
 			<a href="<?php echo site_url('admin/c_dusun/');?>">
 				<button type="button" class="btn btn-success"><i class="fa fa-eye fa-fw"></i> Lihat Data Dusun</button>
 			</a>
-			<a href="<?php echo site_url('admin/c_ped_pertanian/');?>">
-				<button type="button" class="btn btn-success"><i class="fa fa-eye fa-fw"></i> Lihat Data Pertanian</button>
+			<a href="<?php echo site_url('ped/c_ped/');?>">
+				<button type="button" class="btn btn-success"><i class="fa fa-eye fa-fw"></i> Lihat Data Potensi Ekonomi Desa</button>
 			</a>		
 		</div>
 	</div>

@@ -67,7 +67,7 @@
 							</div>
 							
 							<div class="panel-footer">
-								<span align="center">SIDeKa ver 1.3 | Copyleft @2015<span>
+								<span align="center">SIDeKa ver 1.6 | Copyleft @2015<span>
 							</div>
                     </div>
                 </div>

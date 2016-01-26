@@ -34,8 +34,17 @@
 						<?php echo $tanggal;?> - <?php echo $bulan;?> - <?php echo $tahun;?>,
 						<span class="fa fa-clock-o"></span>  <?php echo $jam;?>
 						<h4 class="title">
-						<a href="<?php echo site_url('web/c_home/get_detail_berita/'.$idberita);?>" class="link-berita">
-						<?php echo $judul;?>
+						<a href="<?php echo site_url('web/c_home/get_detail_berita/'.$idberita);?>" title="<?php echo $judul;?>" class="link-berita">
+						<?php if(strlen($judul)<50)
+						{
+							echo $judul;
+						}
+						else
+						{							
+							$judul = substr($judul,0,50);
+							echo $judul.'...';
+						}
+						?>
 						</a>
 						</h4>
 					</div>

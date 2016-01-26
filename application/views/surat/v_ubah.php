@@ -79,34 +79,36 @@
 	</div>
 	
 	<div class="form-group">
-    	<label class="col-md-3 control-label" for="tgl_awal">Tanggal Awal Berlaku</label> 
-    	<div class="col-md-9">
+    	<label class="col-md-3 control-label" for="tgl_awal">Tanggal Berlaku</label> 
+    	<div class="col-md-4">
         <a href="javascript:NewCssCal('tgl_awal','ddmmyyyy')">
         <div class="input-group">
 							 <span class="input-group-addon">
 								<span class="fa fa-table"></span>
 							</span>
-							<input type="text" name="tgl_awal" id="tgl_awal" size="20" class="form-control  input-md" value="<?= date('d-m-Y',strtotime($hasil->tgl_awal))?>" readonly="readonly"/>
+							<input type="text" name="tgl_awal" id="tgl_awal" size="20" class="form-control input-md" value="<?= date('d-m-Y',strtotime($hasil->tgl_awal))?>" placeholder="Awal" readonly="readonly"/>
 		</div>
 		</a>
          <span class="help-block"><?php echo form_error('tgl_awal', '<p class="field_error">','</p>')?></span>  	
 	</div>	
 	</div>
-	
+	<div class="col-md-1">
+		<span class="help-block"></span>  
+	</div> 
 	<div class="form-group">
-    	<label class="col-md-3 control-label" for="tgl_akhir">Tanggal Akhir Berlaku</label> 
-    <div class="col-md-9">
+    	<div class="col-md-4">
       	<a href="javascript:NewCssCal('tgl_akhir','ddmmyyyy')">
       	<div class="input-group">
 							 <span class="input-group-addon">
 								<span class="fa fa-table"></span>
 							</span>
-							<input type="text" name="tgl_akhir" id="tgl_akhir" size="20" class="form-control input-md" value="<?= date('d-m-Y',strtotime($hasil->tgl_akhir))?>" readonly="readonly"/>
+							<input type="text" name="tgl_akhir" id="tgl_akhir" size="20" class="form-control input-md" value="<?= date('d-m-Y',strtotime($hasil->tgl_akhir))?>" placeholder="Akhir" readonly="readonly"/>
 		</div>
 		</a>
       	 <span class="help-block"><?php echo form_error('tgl_akhir', '<p class="field_error">','</p>')?></span>  
 	</div>		
 	</div>
+	
 	
     <input class="form-control input-md" type="hidden" name="nomor_registrasi" id="nomor_registrasi" size="30" value="<?= $hasil->nomor_registrasi?>"/> 
     
@@ -134,7 +136,6 @@
         </div>
 	</div>
    
-
 <legend></legend>
 <div class="form-group">
 		<label class="col-md-0 control-label" for="simpan"></label>

@@ -5,8 +5,10 @@
 					$judul = $berita->judul_berita;
 					$gbr = $berita->gambar;
 					$isi = $berita->isi_berita; 
-					$tempWaktu = date("d-m-Y G:i", strtotime($berita->waktu));	
+					$tempTanggal = date("d-m-Y", strtotime($berita->waktu));	
+					$tempWaktu = date("G:i", strtotime($berita->waktu));	
 					$nama = $berita->nama_pengguna;
+					$penulis = $berita->penulis;
 					
 			?>
 
@@ -18,11 +20,23 @@
 				</div>	
 				<div class="bg berita-detail-text">
 					<h3><?php echo $judul;?></h3>
-					 <li class="fa fa-pencil-square-o">  
-						Penulis:
-						<?php echo $nama;?>,
-						<?php echo $tempWaktu ;?>
-					 </li>
+					 <i class="fa fa-pencil-square-o"> Penulis:
+						<?php if($penulis == null)
+						{
+							echo $nama;
+						}
+						else
+						{
+							echo $penulis;
+						}
+						?></i>
+						|
+					<i class="fa fa-calendar"> Tanggal: <?php echo $tempTanggal ;?></i>
+						
+						|
+					<i class="fa fa-clock-o"> Jam: <?php echo $tempWaktu ;?></i>
+						
+							<legend></legend>
 					<p>
 					<?php echo $isi;?>
 					</p>

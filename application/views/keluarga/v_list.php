@@ -91,10 +91,10 @@ $(document).ready(function() {
 
 </script>
 <div class="row">
-<div class="col-md-9">
+<div class="col-md-8">
 <h3><?= $page_title ?></h3>
 </div>
-<div class="col-md-3">
+<div class="col-md-4">
 			<ul class="nav navbar-right" style="float:right; margin-top:10px;">
 	<li class="dropdown">
 		<a class="dropdown-toggle" data-toggle="dropdown" href="#">

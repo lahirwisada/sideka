@@ -1,4 +1,4 @@
-<h2><?= $page_title ?></h2>
+<h3><?= $page_title ?></h3>
 
 <div class="row">
                 <div class="col-lg-12">
@@ -26,6 +26,7 @@
 			<span class="help-block"><?php echo form_error('no_kk', '<p class="field_error">','</p>')?>
 			</span>
 		</div>
+		<div class="clearfix visible-md"></div>
 		</div>
 		<div class="form-group">
 			 <label class="col-md-3 control-label" for="is_sementara_keluarga">Nama Kepala Keluarga</label>
@@ -37,6 +38,7 @@
 			</span>
 			</div>
 		</div>
+		<div class="clearfix visible-md"></div>
 		<!-- Text input-->
 		<div class="form-group">
 		  <label class="col-md-3 control-label" for="nik">NIK Kepala Keluarga</label>  
@@ -46,7 +48,7 @@
 		  <span class="help-block"><?php echo form_error('nik', '<p class="field_error">','</p>')?></span>  
 		  </div>
 		</div>
-	
+	<div class="clearfix visible-md"></div>
 	<div class="col-md-9">
 		<input type="button" href="#dialog-print" value="Cetak" id="cetak" class="print_kartu btn btn-success" data-toggle="modal" />
 		<input type="button" class="btn btn-danger" value="Batal" id="batal" onclick="location.href='<?= base_url() ?>datapenduduk/c_cetak_kk'"/>

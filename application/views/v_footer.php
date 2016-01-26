@@ -47,7 +47,7 @@
 					echo form_open('c_kontak/simpan_kontak/', $attributes); ?>
 						<div class="form-group has-feedback">
 							<label class="sr-only" for="nama">Nama</label>
-							<input type="text" class="form-control input-md" placeholder="Nama" id="nama" name="nama" required >
+							<input type="text" class="form-control input-md" placeholder="Nama" id="nama" name="nama"  required >
 						</div>
 						<div class="form-group has-feedback">
 							<label class="sr-only" for="email">Alamat Email</label>
@@ -55,16 +55,20 @@
 						</div>
 						<div class="form-group has-feedback">
 							<label class="sr-only" for="pesan">Pesan</label>
-							<textarea class="form-control input-md" rows="2" placeholder="Pesan" id="pesan" name="pesan" required></textarea>
+							<textarea class="form-control input-md" rows="5" placeholder="Pesan" id="pesan" name="pesan" required></textarea>
 						</div>
 						
-						<div class="form-group has-feedback">
+						<!--div class="form-group has-feedback">
 						<input class="form-control input-md" type="text" id="aunt" name="aunt" placeholder="Masukan Kode Diatas" required>
-						</div>
+						</div-->
+						
 						<div class="form-group has-feedback">
-							<button id="kirim" name="kirim" class="btn btn-default">Kirim</button>
+							<button id="kirim" name="kirim" class="btn btn-default" style="display:none;">Kirim</button>
 						</div>
+						<a id="kirimLogin" href="https://auth.klikindonesia.or.id/authorize.php?scope=authorizations&appid=<?php echo $data_sso->app_id;?>&access_type=login" class="btn btn-default" role="button">Kirim</a>
+					
 					<?php echo form_close(); ?>
+					
 				</div>
 			</div>
 		</div>
@@ -74,7 +78,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				SIDeKa ver 1.3 | Copyleft @2015
+				SIDeKa ver 1.6 | Copyleft @2015
 			</div>
 		</div>
 	</div>
@@ -89,39 +93,14 @@
 <!-- Alertify JavaScript -->
 <script src="<?php echo base_url(); ?>assetku/alertify/lib/alertify.min.js"></script>
 
-<script type="text/javascript" src="<?php echo base_url(); ?>assetku/js/jquery-1.11.0.js"></script>
-<link rel="stylesheet" href="<?php echo base_url();?>assetku/realperson/jquery.realperson.css" media="screen" />
-<script type="text/javascript" src="<?php echo base_url(); ?>assetku/realperson/jquery.plugin.js"></script>	
-<script type="text/javascript" src="<?php echo base_url(); ?>assetku/realperson/jquery.realperson.js"></script>	
-
-<style>
-label { display: none; width: 20%; }
-
-.realperson-challenge 
-{  
-	display: inline-block;
-	padding : 2px;	
-	padding-top : 5px;
-	margin-bottom : 13px;
-	background-color: #fff;
-	background-image: none;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-	box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-	-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-	transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-}
-</style>
-
 <script>
 
 $(function() {
-	$('#aunt').realperson({chars: $.realperson.alphanumeric,regenerate: '',length: 5});
+/* 	$('#aunt').realperson({chars: $.realperson.alphanumeric,regenerate: '',length: 5});
 	
 	$('.realperson-challenge').click(function() { 
 		window.location.reload(1);
-	});
+	}); */
 	
 	$('#formKontak').submit(function(event) { 
 	
@@ -137,13 +116,13 @@ $(function() {
 				   window.location.reload(1);
 				}, 1000);
 			}
-			else {
+			/* else {
 				alertify.error("Kode tidak cocok !");
 				$('#kirim').prop('disabled', true);
 				setTimeout(function(){
 				   window.location.reload(1);
 				}, 1000);
-			}
+			} */
 		}
 	});			
 	//return true;

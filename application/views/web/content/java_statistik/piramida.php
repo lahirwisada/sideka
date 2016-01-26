@@ -40,8 +40,8 @@ $(function () {
                         return (Math.abs(this.value)) + '';
                     }
                 },
-                min: -100,
-                max: 100
+                min: -<?php echo $totalPenduduk;?>,
+                max:  <?php echo $totalPenduduk;?>
             },
 
             plotOptions: {
@@ -52,8 +52,8 @@ $(function () {
 
             tooltip: {
                 formatter: function () {
-                    return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
-                        'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
+                    return '<b>' + this.series.name + ', Umur ' + this.point.category + '</b><br/>' +
+                        'Jumlah: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
                 }
             },
 

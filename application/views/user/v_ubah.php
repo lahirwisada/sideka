@@ -55,7 +55,10 @@
          <?php $options = array(
 						''=>'-- Pilih --',
 						'Administrator' => 'Administrator',
-						'Pengelola Data' => 'Pengelola Data Desa',
+						'Pengelola Data' => 'Pengelola Data',
+						'Pengelola Aset' => 'Pengelola Aset',
+						'Pengelola Peta' => 'Pengelola Peta',
+						'Perencana Pembangunan' => 'Perencana Pembangunan'
 						);
 					$id = 'id="role" class="form-control input-md" ';
 				echo form_dropdown('role',$options,$hasil->role,$id); ?>

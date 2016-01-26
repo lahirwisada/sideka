@@ -10,31 +10,31 @@
 	<div class="form-group">
         <label class="col-md-3 control-label" for="id_jabatan"> Perangkat Desa</label>
         <div class="col-md-9">
-        <span class="help-block">
+       
          <?php $id = 'id="id_jabatan" class="form-control input-md" ';
         echo form_dropdown('id_jabatan',$deskripsi_jabatan,$hasil->id_jabatan,$id)?> 
-        </span>
+         <span class="help-block"></span>
         </div>
     </div>
 	
 	<div class="form-group">
-		<label class="col-md-3 control-label" for="is_aktif">Status Perangkat Desa</label>
+		<label class="col-md-3 control-label" for="is_aktif"> Status</label>
         <div class="col-md-9">
-			<div class="radio">
+			<div class="radio-inline">
 			<input type="radio" name="is_aktif"  value="Y" <?php echo set_radio('is_aktif','Y',$hasil->is_aktif=='Y');?> />Aktif
 			</div>
-			<div class="radio">
+			<div class="radio-inline">
 			<input type="radio" name="is_aktif"  value="N" <?php echo set_radio('is_aktif','N',$hasil->is_aktif=='N');?> />Tidak Aktif
 			</div>
+			<span class="help-block"></span>
 		</div>
 	</div>
-	
+	<legend></legend>
    	<div class="form-group">
         <label class="col-md-3 control-label" for="nik"> NIK</label>
-        <div class="col-md-9">
-        <span class="help-block">
-         <input class="form-control input-md" type="text" name="nik" id="nik" value="<?= $nik ?>" size="25" disabled/> 
-        <?php echo form_error('nik', '<p class="field_error">','</p>')?>
+        <div class="col-md-9">        
+        <input class="form-control input-md" type="text" name="nik" id="nik" value="<?= $nik ?>" size="25" disabled/> 
+		<span class="help-block"> <?php echo form_error('nik', '<p class="field_error">','</p>')?>
         </span>
         </div>
     </div>
@@ -42,10 +42,10 @@
 	<div class="form-group">
         <label class="col-md-3 control-label" for="nama_sementara"> Nama </label>
         <div class="col-md-9">
-        <span class="help-block">
+       
          <input class="form-control input-md" type="text" name="nama" id="nama" size="25" value="<?= $nama ?>" disabled/> 
         <input type="hidden" name="nama" id="nama" size="25" /> 
-        <?php echo form_error('nama', '<p class="field_error">','</p>')?>
+         <span class="help-block"><?php echo form_error('nama', '<p class="field_error">','</p>')?>
         </span>
         </div>
     </div>
@@ -53,9 +53,9 @@
 	<div class="form-group">
         <label class="col-md-3 control-label" for="nip"> NIP</label> 
         <div class="col-md-9">
-        <span class="help-block">
          <input class="form-control input-md" type="text" name="nip" id="nip" value="<?= $hasil->nip ?>" size="25" /> 
-        <?php echo form_error('nip', '<p class="field_error">','</p>')?>
+        
+        <span class="help-block"><?php echo form_error('nip', '<p class="field_error">','</p>')?>
         </span>
         </div>
     </div>
@@ -63,9 +63,9 @@
     <div class="form-group">
         <label class="col-md-3 control-label" for="niap"> NIAP </label>
         <div class="col-md-9">
-        <span class="help-block">
+        
          <input class="form-control input-md" type="text" name="niap" id="niap" value="<?= $hasil->niap ?>" size="25" /> 
-         <?php echo form_error('niap', '<p class="field_error">','</p>')?>
+         <span class="help-block"><?php echo form_error('niap', '<p class="field_error">','</p>')?>
         </span>
         </div>
     </div>
@@ -73,19 +73,19 @@
     <div class="form-group">
         <label class="col-md-3 control-label" for="id_pangkat_gol"> Golongan</label>
         <div class="col-md-9">
-        <span class="help-block">
+       
          <?php $id = 'id="id_pangkat_gol" class="form-control input-md"';
                 echo form_dropdown('id_pangkat_gol',$deskripsi_pangkat_gol,$hasil->id_pangkat_gol,$id)?> 
-        </span>
+         <span class="help-block"></span>
         </div>
     </div>
 
     <div class="form-group">
         <label class="col-md-3 control-label" for="no_sk_angkat"> No. SK Angkat </label>
         <div class="col-md-9">
-        <span class="help-block">
+        
          <input class="form-control input-md" type="text" name="no_sk_angkat" id="no_sk_angkat" value="<?= $hasil->no_sk_angkat ?>" size="25" /> 
-          <?php echo form_error('no_sk_angkat', '<p class="field_error">','</p>')?>
+         <span class="help-block"> <?php echo form_error('no_sk_angkat', '<p class="field_error">','</p>')?>
         </span>
         </div>
     </div>
@@ -125,10 +125,14 @@
         </div>
     </div>
  
-   <p>
+	
+	<div class="form-group col-md-12">
+	<legend></legend>
 	<input type="submit" value="Simpan" class="btn btn-success" id="simpan"/>
 	<input type="button" value="Batal" class="btn btn-danger" id="batal" onclick="location.href='<?= base_url() ?>pustaka/c_perangkat'"/>
-   </p>
+
+	</div>
+   
 
 <?php echo form_close(); ?>
 

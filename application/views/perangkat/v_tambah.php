@@ -17,14 +17,15 @@
 
 	<div class="form-group">
 	
-	 	<label class="col-md-3 control-label" for="is_aktif">Status Perangkat Desa</label>
+	 	<label class="col-md-3 control-label" for="is_aktif">Status</label>
         <div class="col-md-9">
-        <div class="radio">
+        <div class="radio-inline">
 		<?php echo form_radio('is_aktif', 'Y', TRUE); ?> Aktif
 		</div>
-		<div class="radio">
+		<div class="radio-inline">
 		<?php echo form_radio('is_aktif', 'N', FALSE); ?> Tidak Aktif
 		</div>
+		<span class="help-block"></span>
 		</div>
 	</div>
 	
@@ -111,30 +112,6 @@
         <input class="form-control input-md" type="text" name="tgl_angkat" id="tgl_angkat" size="20" readonly="readonly"/>
 		</div></a>
 	<span class="help-block"><?php echo form_error('tgl_angkat', '<p class="field_error">','</p>')?></span>
-	</div>
-	</div>
-
-
-	<div class="form-group">
-    	<label class="col-md-3 control-label" for="no_sk_berhenti"> No. SK Berhenti</label> 
-        <div class="col-md-9">
-        <span class="help-block">
-         <input class="form-control input-md" type="text" name="no_sk_berhenti" id="no_sk_berhenti" size="25" /> 
-		</span>
-		</div>
-	</div>	
-	
-	<div class="form-group">
-    	 <label class="col-md-3 control-label" for="tgl_berhenti">Tanggal Berhenti</label> 
-        <div class="col-md-9">
-        <a href="javascript:NewCssCal('tgl_berhenti','ddmmyyyy')">
-		<div class="input-group">
-							 <span class="input-group-addon">
-								<span class="fa fa-table"></span>
-							</span>
-        <input class="form-control input-md" type="text" name="tgl_berhenti" id="tgl_berhenti" size="20" readonly="readonly"/>
-		</div></a>
-	<span class="help-block"><?php echo form_error('tgl_berhenti', '<p class="field_error">','</p>')?></span>
 	</div>
 	</div>
 	

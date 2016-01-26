@@ -10,10 +10,27 @@
 	<div class="form-group">
     	<label class="col-md-3 control-label" for="kode_surat">Kategori Surat</label>  
         <div class="col-md-9">
-         <?php $id = 'id="kode_surat" class="form-control input-md" required';
+         <?php $id ='id="kode_surat" class="form-control input-md" required';
 		echo form_dropdown('kode_surat',$deskripsi_kode_surat,'',$id)?>
 		<span class="help-block"><?php echo form_error('kode_surat', '<p class="field_error">','</p>')?></span> 
 		</div>	
+	</div>
+	
+	<div class="form-group">
+    	<label class="col-md-3 control-label" for="nomor_surat">Nomor Surat</label> 
+        <div class="col-md-3">
+        <input class="form-control input-md" type="text" name="nomor_surat" placeholder="Nomor" id="nomor_surat" size="30" value="<?=$nomor_max_increment?>" onkeypress="return numbersonly(event)" required/> 
+        <span class="help-block"><?php echo form_error('nomor_surat', '<p class="field_error">', '</p>'); ?></span>
+        </div> 
+		<div class="col-md-3">
+        <input class="form-control input-md" type="text" name="supra_kode" placeholder="Supra Kode" id="supra_kode" size="30" readonly="readonly"/>  
+        <span class="help-block"><?php echo form_error('supra_kode', '<p class="field_error">', '</p>'); ?></span>
+        </div>
+		
+		<div class="col-md-3">
+        <input class="form-control input-md" type="text" name="tahun_surat" placeholder="Tahun" id="tahun_surat" size="30" value="<?php echo date('Y');?>" readonly="readonly"/>  
+        <span class="help-block"><?php echo form_error('tahun_surat', '<p class="field_error">', '</p>'); ?></span>
+        </div>
 	</div>
 	
 	<div class="form-group">
@@ -67,29 +84,30 @@
 	</div>
 
 	<div class="form-group">
-    	<label class="col-md-3 control-label" for="tgl_awal">Tanggal Awal Berlaku</label> 
-    	<div class="col-md-9">
+    	<label class="col-md-3 control-label" for="tgl_awal">Tanggal Berlaku</label> 
+    	<div class="col-md-4">
         <a href="javascript:NewCssCal('tgl_awal','ddmmyyyy')">
         <div class="input-group">
 							 <span class="input-group-addon">
 								<span class="fa fa-table"></span>
 							</span>
-							<input type="text" name="tgl_awal" id="tgl_awal" size="20" class="form-control input-md" readonly="readonly"/>
+							<input type="text" name="tgl_awal" id="tgl_awal" size="20" class="form-control input-md" placeholder="Awal" readonly="readonly"/>
 		</div>
 		</a>
          <span class="help-block"><?php echo form_error('tgl_awal', '<p class="field_error">','</p>')?></span>  	
 	</div>	
 	</div>
-	
+	<div class="col-md-1">
+		<span class="help-block"></span>  
+	</div> 
 	<div class="form-group">
-    	<label class="col-md-3 control-label" for="tgl_akhir">Tanggal Akhir Berlaku</label> 
-    	<div class="col-md-9">
+    	<div class="col-md-4">
       	<a href="javascript:NewCssCal('tgl_akhir','ddmmyyyy')">
       	<div class="input-group">
 							 <span class="input-group-addon">
 								<span class="fa fa-table"></span>
 							</span>
-							<input type="text" name="tgl_akhir" id="tgl_akhir" size="20" class="form-control input-md" readonly="readonly"/>
+							<input type="text" name="tgl_akhir" id="tgl_akhir" size="20" class="form-control input-md" placeholder="Akhir" readonly="readonly"/>
 		</div>
 		</a>
       	 <span class="help-block"><?php echo form_error('tgl_akhir', '<p class="field_error">','</p>')?></span>  
@@ -162,5 +180,11 @@
         }
     });
   });
+  
+  $("#kode_surat").change(function(){
+			var supra_kode = document.getElementById("kode_surat").value;	
+			document.getElementById("supra_kode").value = supra_kode;	
+			
+	});
   
 </script>

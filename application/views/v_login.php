@@ -59,7 +59,7 @@
                         <?php echo form_close(); ?>
                     </div>
 					<div class="panel-footer">
-						<span align="center">SIDeKa ver 1.3 | Copyleft @2015<span>
+						<span align="center">SIDeKa ver 1.6 | Copyleft @2015<span>
 					</div>
                 </div>
             </div>
@@ -98,12 +98,10 @@
 			return true;
 		});
 	
-        <?php if ($cek != ''){ ?>
 		if(<?php echo $cek;?>=='0')
 		{
 			alertify.error("Nama Pengguna dan kata sandi tidak cocok !");
 		}
-        <?php }  ?>
 	}); 
 	function reset () {
 		$("#toggleCSS").attr("href", "<?php echo base_url(); ?>assetku/alertify/themes/alertify.default.css");

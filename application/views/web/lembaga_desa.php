@@ -30,13 +30,9 @@
 				<table>
 				<h5>
 				<tr>
-				<td>NIP</td>
-				<td>:</td>
 				<td><?php echo $nip_perDes;?></td><br>
 				</tr>
 				<tr>
-				<td>Nama</td>
-				<td>:</td>
 				<td><?php echo $nama_perDes;?></td>
 				</h5>
 				</tr>

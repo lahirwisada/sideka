@@ -67,7 +67,7 @@
 				
 		<!-- Navigation -->
 		<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-		<div class="col-md-8">
+		<div class="col-md-7">
 			<div class="navbar-header">
 					<a href=" <?php 
 					if($role == 'Administrator') 
@@ -83,7 +83,7 @@
 					</div>
 	    					
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-5">
 				<ul class="nav navbar-top-links navbar-right " style="margin-top:10px;">
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -141,13 +141,14 @@
 			buttonFocus   : "ok"
 		});
 	}
-
+	$(document).ready(function() {
+	 
+	<?php $flashmessage = $this->session->flashdata('message');
+		echo ! empty($flashmessage) ? 'alertify.success("'.$flashmessage.'")' : ''; ?>
+	<?php $flashexist = $this->session->flashdata('exist');
+		echo ! empty($flashexist) ? 'alertify.error("'.$flashexist.'")' : ''; ?>
+	});
 	</script>
 
-
-  
-  
-  
-  
 </body>
 </html>

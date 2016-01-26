@@ -312,6 +312,7 @@ echo form_open_multipart('datapenduduk/c_keluarga/simpan_keluarga', $attributes)
          <span class="help-block"></span>
 		</div>
 	</div>
+	<div class="clearfix visible-md"></div>
 	<!--<div class="form-group">
 		<label class="col-md-3 control-label" for="pendapatan_per_bulan">Pendapatan Per Bulan </label> 
 		<div class="col-md-9">

@@ -14,7 +14,7 @@
 			$jabatan = $rw->nomor_rw;
 			$dusun = $rw->nama_dusun;
 		?>
-		<div class="col-lg-2 col-md-2 col-sm-3 col-xs-6" >
+		<div class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
 			<div class="rt_rw-content">
 				<div class="rt_rw-content-img col-lg-12 col-md-12 col-sm-12 col-xs-12">	
 				<img id="displayPhoto" src='<?php echo site_url($foto_RW);?>' class='img-responsive img-thumbnail'/>	
@@ -27,14 +27,10 @@
 				<div class="rt_rw-content-text">
 				<table>
 				<tr>
-				<td>NIK</td>
-				<td>:</td>
 				<td><?php echo $nik_RW;?></td>
 				</tr>
 				<tr>
-				<td>Nama</td>
-				<td>:</td>
-				<td><?php echo $nama_RW;?></td>
+				<td><strong><?php echo $nama_RW;?></strong></td>
 				
 				</tr>
 				</table>
@@ -63,7 +59,7 @@
 			$jabatan = $rt->nomor_rt;
 			$dusun = $rt->nama_dusun;
 		?>
-		<div class="col-lg-2 col-md-2 col-sm-3 col-xs-6" >
+		<div class="col-lg-2 col-md-2 col-sm-3 col-xs-4" >
 			<div class="rt_rw-content">
 				<div class="rt_rw-content-img col-lg-12 col-md-12 col-sm-12 col-xs-12">	
 				<img id="displayPhoto" src='<?php echo site_url($foto_RT);?>' class='img-responsive img-thumbnail'/>	
@@ -76,14 +72,10 @@
 				<div class="rt_rw-content-text">
 				<table>
 				<tr>
-				<td>NIK</td>
-				<td>:</td>
 				<td><?php echo $nik_RT;?></td>
 				</tr>
 				<tr>
-				<td>Nama</td>
-				<td>:</td>
-				<td><?php echo $nama_RT;?></td>
+				<td><strong><?php echo $nama_RT;?></strong></td>
 				
 				</tr>
 				</table>
