@@ -45,7 +45,6 @@ class M_piramida extends CI_Model {
 		$q = $this->db->get();
 		return $q->num_rows();				
 	}
-	
 	function getDataLaki(){
         $this->db->select('*');
 		$this->db->where('id_jen_kel','1');

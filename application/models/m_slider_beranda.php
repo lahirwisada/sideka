@@ -46,8 +46,10 @@ class M_slider_beranda extends CI_Model {
 		return $this->db->affected_rows();
 	}	
 	
-	function deleteSliderBeranda($id)
+	function deleteSliderBeranda($id,$background,$logo)
 	{
+		unlink($background);
+		unlink($logo);
 		$this->db->where('id_slider_beranda', $id);
 		$this->db->delete($this->_table);
 	}
@@ -84,6 +86,6 @@ class M_slider_beranda extends CI_Model {
 		//if id is unique we want just one row to be returned
 		$data = array_shift($q->result_array());
 		return ($data['konten_logo']);
-	}
+	}	
 }
 ?>

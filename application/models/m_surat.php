@@ -154,7 +154,7 @@ class M_surat extends CI_Model {
     	 	return $this->db->get_where('tbl_penduduk',array('NIK' => $id))->row();
    	} 
    	
-   	 	function get_pamong() 
+   	function get_pamong() 
 	{      
 		$this->db->select('tbl_perangkat.id_perangkat, tbl_perangkat.nip,tbl_penduduk.nama,ref_jabatan.deskripsi as jabatan')->from('tbl_penduduk');
 		$this->db->join('tbl_perangkat','tbl_perangkat.id_penduduk = tbl_penduduk.id_penduduk');
@@ -528,6 +528,23 @@ class M_surat extends CI_Model {
 		}
 	}
 
+	function getKodeSuratBySupraKode($supra_kode)
+	{
+		$this->db->select('kode_surat');
+		$this->db->where('supra_kode', $supra_kode);
+		$q = $this->db->get('ref_kode_surat');
+		//if id is unique we want just one row to be returned
+		$data = array_shift($q->result_array());
+		$result = $data['kode_surat'];
+		if ($result == NULL)
+		{
+			return 0;
+		}
+		else
+		{			
+			return  $result;
+		}
+	}
   function insertSurat($data)
   {
     $this->db->insert($this->_table, $data);
@@ -562,5 +579,18 @@ class M_surat extends CI_Model {
 	}
 	return ($data);
   }
+  
+  function get_kode_surat2() 
+  {      
+	$records = $this->db->get('ref_kode_surat');
+	$data=array();
+	foreach ($records->result() as $row)
+	{	
+		$data[''] = '--Pilih--';
+		$data[$row->supra_kode] = $row->deskripsi;
+	}
+	return ($data);
+  }
+
 }
 ?>
