@@ -21,11 +21,19 @@ class l_read_rancangan_rpjm_desa {
             19 => 'kerjasama pihak ketiga',
         )
     );
+    private $_const_excel_content_jumlah = array(
+        1 => "jumlah per bidang 1",
+        2 => "jumlah per bidang 2",
+        3 => "jumlah per bidang 3",
+        4 => "jumlah per bidang 4",
+        "total" => "jumlah total",
+    );
     public $is_valid_template = array(
         "content_title_ok" => FALSE,
         "header_ok" => TRUE,
         "tahun_anggaran_ok" => FALSE
     );
+    public $id_master_rancangan_rpjm = FALSE;
     public $upload_data = FALSE;
     public $excel_content = FALSE;
     public $tahun_anggaran = NULL;
@@ -54,7 +62,26 @@ class l_read_rancangan_rpjm_desa {
         "tahun_akhir" => NULL,
         "id_bidang" => NULL,
         "id_coa" => NULL,
-        "id_tahun_anggaran" => NULL
+        "id_tahun_anggaran" => NULL,
+        "id_m_rancangan_rpjm_desa" => NULL
+    );
+    public $master_rpjm_row_template = array(
+        "tahun_awal" => NULL,
+        "tahun_akhir" => NULL,
+        "tahun_anggaran" => NULL,
+        "nama_file" => NULL,
+        "total_bidang_1" => NULL,
+        "total_bidang_2" => NULL,
+        "total_bidang_3" => NULL,
+        "total_bidang_4" => NULL,
+        "total_keseluruhan" => NULL,
+        "tanggal_disusun" => NULL,
+        "disusun_oleh" => NULL,
+        "kepala_desa" => NULL,
+        "id_desa" => NULL,
+        "id_kecamatan" => NULL,
+        "id_kab_kota" => NULL,
+        "id_provinsi" => NULL
     );
 
     public function __construct() {
@@ -189,16 +216,82 @@ class l_read_rancangan_rpjm_desa {
         return $arr_result;
     }
 
+    public function get_array_provinsi() {
+        $this->_ci->load->model('m_provinsi');
+        return $this->_ci->m_provinsi->getArray();
+    }
+
+    public function get_array_kota($id_provinsi) {
+        $this->_ci->load->model('m_kabkota');
+        return $this->_ci->m_kabkota->getArray($id_provinsi);
+    }
+
+    public function get_array_kecamatan($id_kab_kota) {
+        $this->_ci->load->model('m_kec');
+        return $this->_ci->m_kec->getArray($id_kab_kota);
+    }
+
+    public function get_array_desa($id_kecamatan) {
+        $this->_ci->load->model('m_desa');
+        return $this->_ci->m_desa->getArray($id_kecamatan);
+    }
+
     public function save_data($data = FALSE, $j = 1) {
         if ($data) {
-            $this->_ci->load->model('rencanaPembangunan/m_rancangan_rpjm_desa');
+//            $this->_ci->load->model('rencanaPembangunan/m_rancangan_rpjm_desa');
             $this->_ci->db->insert('tbl_rp_rancangan_rpjm_desa', $data);
             /* echo $j . ". >>>  " . $this->_ci->db->last_query() . "<br />"; */
         }
     }
 
+    public function save_master_rpjm($data = FALSE) {
+        if ($data) {
+            $this->_ci->db->insert('tbl_rp_m_rancangan_rpjm_desa', $data);
+            return $this->_ci->db->insert_id();
+        }
+        return FALSE;
+    }
+    
+    public function update_master_rpjm($data = FALSE){
+        if($data && $this->id_master_rancangan_rpjm){
+            $this->_ci->db->where('id_m_rancangan_rpjm_desa', $this->id_master_rancangan_rpjm);
+            $this->_ci->db->update('tbl_rp_m_rancangan_rpjm_desa', $data);
+            return TRUE;
+        }
+        return FALSE;
+    }
+
     public function save_content_excel() {
         return $this->get_content_excel(TRUE);
+    }
+
+    private function get_idx_total($text_total = FALSE) {
+
+        $idx = $this->get_nearest_word($text_total, $this->_const_excel_content_jumlah, TRUE);
+
+        $idx_found = FALSE;
+        switch ($idx) {
+            case 1:
+                $idx_found = "total_bidang_1";
+                break;
+            case 2:
+                $idx_found = "total_bidang_2";
+                break;
+            case 3:
+                $idx_found = "total_bidang_3";
+                break;
+            case 4:
+                $idx_found = "total_bidang_4";
+                break;
+            case "total":
+                $idx_found = "total_keseluruhan";
+                break;
+            default:
+                $idx_found = FALSE;
+                break;
+        }
+
+        return $idx_found;
     }
 
     public function get_content_excel($save_data = FALSE) {
@@ -206,10 +299,13 @@ class l_read_rancangan_rpjm_desa {
         $valid_template = $this->is_valid_template();
         $top_level_bidang = $this->get_array_top_level_bidang();
 
-
         if ($this->is_valid_template() && $top_level_bidang) {
             $last_bidang = '';
             $last_sub_bidang = '';
+
+            $master_rpjm = $this->master_rpjm_row_template;
+            
+            $master_rpjm["nama_file"] = $this->upload_data['file_name_uploaded'];
 
             $this->_ci->db->trans_off();
             $done = FALSE;
@@ -220,6 +316,52 @@ class l_read_rancangan_rpjm_desa {
                 }
                 $j = 1;
 
+
+                /**
+                 * Ambil data Nama Desa, Kecamatan, Kabupaten dan Provinsi
+                 */
+                $nama_provinsi = trim($this->get_cell_value(6, 3, ''));
+                $arr_provinsi = $this->get_array_provinsi();
+                $id_kab_kota = FALSE;
+                $id_kecamatan = FALSE;
+                $id_desa = FALSE;
+                
+                $master_rpjm["tahun_awal"] = intval(trim($this->tahun_anggaran_awal));
+                $master_rpjm["tahun_akhir"] = intval(trim($this->tahun_anggaran_akhir));
+                $master_rpjm["tahun_anggaran"] = trim($this->tahun_anggaran_awal)." - ".trim($this->tahun_anggaran_akhir);
+
+                if ($arr_provinsi) {
+                    $id_provinsi = $this->get_nearest_word($nama_provinsi, $arr_provinsi, TRUE);
+                    $master_rpjm["id_provinsi"] = $id_provinsi != 0 ? $id_provinsi : NULL;
+
+                    
+
+                    $arr_kota = $this->get_array_kota($id_provinsi);
+                    if ($arr_kota) {
+                        $nama_kab_kota = trim($this->get_cell_value(5, 3, ''));
+                        $id_kab_kota = $this->get_nearest_word($nama_kab_kota, $arr_kota, TRUE);
+                        $master_rpjm["id_kab_kota"] = $id_kab_kota != 0 ? $id_kab_kota : NULL;
+                    }
+
+                    $arr_kecamatan = $this->get_array_kecamatan($id_kab_kota);
+                    if ($arr_kecamatan) {
+                        $nama_kecamatan = trim($this->get_cell_value(4, 3, ''));
+                        $id_kecamatan = $this->get_nearest_word($nama_kecamatan, $arr_kecamatan, TRUE);
+                        $master_rpjm["id_kecamatan"] = $id_kecamatan != 0 ? $id_kecamatan : NULL;
+                    }
+
+                    $arr_desa = $this->get_array_desa($id_kecamatan);
+                    if ($arr_desa) {
+                        $nama_desa = trim($this->get_cell_value(3, 3, ''));
+                        $id_desa = $this->get_nearest_word($nama_desa, $arr_desa, TRUE);
+                        $master_rpjm['id_desa'] = $id_desa != 0 ? $id_desa : NULL;
+                    }
+                }
+
+                if ($save_data) {
+                    $this->id_master_rancangan_rpjm = $this->save_master_rpjm($master_rpjm);
+                }
+
                 for ($i = 12; $i <= $this->excel_content['numRows']; $i++) {
 
                     /**
@@ -228,6 +370,13 @@ class l_read_rancangan_rpjm_desa {
                     $text_jumlah_total = $this->get_cell_value($i, 1);
 //                echo $text_jumlah_total."<br />"; 
                     if (!is_numeric($text_jumlah_total) && !(count($this->excel_content['cells'][$i]) > 2)) {
+//                        $_const_excel_content_jumlah
+                        $text_total = $this->get_cell_value($i, 1, '');
+                        $jumlah_total = $this->get_cell_value($i, 15, '');
+                        $idx_total = $this->get_idx_total($text_total);
+                        if ($idx_total && $jumlah_total) {
+                            $master_rpjm[$idx_total] = $jumlah_total;
+                        }
                         continue;
                     }
 
@@ -285,6 +434,10 @@ class l_read_rancangan_rpjm_desa {
 //                        unset($current_row["id_bidang"]);
                         }
 
+                        if ($this->id_master_rancangan_rpjm) {
+                            $current_row["id_m_rancangan_rpjm_desa"] = $this->id_master_rancangan_rpjm;
+                        }
+
                         unset($current_row["id_coa"], $current_row["id_tahun_anggaran"]);
 //                    $current_row["id_coa"] = $this->get_cell_value($i, 5, '');
 //                    $current_row["id_tahun_anggaran"] = $this->get_cell_value($i, 5, '');
@@ -296,6 +449,8 @@ class l_read_rancangan_rpjm_desa {
                         }
                     }
                 }
+                
+                $this->update_master_rpjm($master_rpjm);
 
                 if ($save_data) {
                     $this->_ci->db->trans_complete();
