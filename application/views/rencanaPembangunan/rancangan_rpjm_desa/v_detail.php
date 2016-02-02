@@ -14,6 +14,8 @@ $attention_message = isset($attention_message) && $attention_message ? $attentio
 echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : '';
 ?>
 
+
+
 <?php
 echo $js_grid;
 ?>
@@ -21,13 +23,20 @@ echo $js_grid;
 <script type="text/javascript">
     var _base_url = '<?= base_url() ?>';
 
+    function edit_rpjmd(id) {
+        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/edit/' + id;
+    }
+
+    function add_sub_program(id) {
+        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/add_sub_program/' + id;
+    }
 
     function show_detail_program(id) {
-        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/detail/' + id;
+        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/show_detail_program/' + id;
     }
-    
-    function download_excel(id){
-        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/download_excel/' + id;
+
+    function show_tree_rpjmd(id) {
+        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/show_tree_rpjmd/' + id;
     }
 
     function btn(com, grid)
@@ -79,19 +88,14 @@ echo $js_grid;
 
     });
 </script>
-<p>
-    Untuk mengisikan data RPJM gunakan template yang telah disediakan.<br />
-    Isikan konten seperlunya, jagalah keotentikan template sehingga sistem dapat membacanya dengan sempurna.
-</p>
-<span class="help-block">
 
-    <a href="<?php echo base_url().'uploads/temp_upload_excel/rpjm/template/RPJMTemplate.xls'; ?>" class="btn btn-success">Download Template RPJM</a>
-
-</span>
 
 <table id="flex1" style="display:none"></table>
+<span class="help-block">
 
+    <a href="<?php echo base_url().'rencanaPembangunan/c_rancangan_rpjm_desa'; ?>" class="btn btn-danger">Kembali</a>
 
+</span>
 
 <script>
     function nav_active() {
