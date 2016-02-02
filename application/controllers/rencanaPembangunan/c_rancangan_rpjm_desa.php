@@ -30,6 +30,9 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
         }
 
         $this->lists();
+
+        $attention_message = $this->session->flashdata('attention_message');
+        $this->set('attention_message', $attention_message);
     }
 
     public function load_data() {
@@ -67,12 +70,18 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
             $this->load->library('rencanaPembangunan/l_read_rancangan_rpjm_desa');
 
             $is_upload_ok = $this->l_read_rancangan_rpjm_desa->upload_excel('file_excel');
+
+            /**
+             * @todo Simpan Master untuk rancangan rpjm desa
+             * @todo Simpan informasi Desa, Kecamatan, Kabupaten, dan Provinsi pada Master
+             */
             $save_content_status = $this->l_read_rancangan_rpjm_desa->save_content_excel();
-            
-            if($save_content_status){
+
+            if ($save_content_status) {
+                $this->session->set_flashdata('attention_message', 'Import Excel Sukses.');
                 redirect('rencanaPembangunan/c_rancangan_rpjm_desa', 'refresh');
-            }else{
-                
+            } else {
+                $this->session->set_flashdata('attention_message', 'Import Excel Gagal dilakukan, cek kembali template dan konten data anda.');
             }
         } else {
             redirect('c_login', 'refresh');
@@ -80,7 +89,8 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
     }
 
     public function add() {
-        
+        $attention_message = $this->session->flashdata('attention_message');
+        $this->set('attention_message', $attention_message);
     }
 
 }
