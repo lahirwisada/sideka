@@ -73,5 +73,23 @@ class M_kec extends CI_Model {
   {	
     return $this->db->get_where($this->_table,array('kode_kecamatan_bps' => $kode_kecamatan_bps))->row();
   }
+  
+  function getArray($id_kab_kota=FALSE) {
+        if(!$id_kab_kota){
+            return FALSE;
+        }
+        $this->db->select('id_kecamatan, nama_kecamatan');
+        $this->db->where('id_kab_kota', $id_kab_kota);
+        $q = $this->db->get('ref_kecamatan');
+        $rs = $q->result_array();
+
+        $arr_result = FALSE;
+        if ($rs) {
+            foreach ($rs as $record) {
+                $arr_result[$record["id_kecamatan"]] = strtolower(trim($record["nama_kecamatan"]));
+            }
+        }
+        return $arr_result;
+    }
 }
 ?>

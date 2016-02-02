@@ -130,5 +130,23 @@ class M_desa extends CI_Model {
     
         return $query->result();
   }
+  
+  function getArray($id_kecamatan=FALSE) {
+        if(!$id_kecamatan){
+            return FALSE;
+        }
+        $this->db->select('id_desa, nama_desa');
+        $this->db->where('id_kecamatan', $id_kecamatan);
+        $q = $this->db->get('ref_desa');
+        $rs = $q->result_array();
+
+        $arr_result = FALSE;
+        if ($rs) {
+            foreach ($rs as $record) {
+                $arr_result[$record["id_desa"]] = strtolower(trim($record["nama_desa"]));
+            }
+        }
+        return $arr_result;
+    }
 }
 ?>
