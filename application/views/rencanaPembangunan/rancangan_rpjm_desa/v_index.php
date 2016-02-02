@@ -1,7 +1,12 @@
 <link href="<?= $this->config->item('base_url'); ?>css/flexigrid.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?= $this->config->item('base_url'); ?>js/jquery.pack.js"></script>
 <script type="text/javascript" src="<?= $this->config->item('base_url'); ?>js/flexigrid.pack.js"></script>
-
+<style type="text/css">
+    .flexigrid{
+        position:absolute;
+        overflow:auto;
+    }
+</style>
 
 <h3><?php echo $page_title; ?></h3>
 <h5><b><?php echo $deskripsi_title; ?></b></h5>
@@ -14,19 +19,19 @@ echo $js_grid;
     var _base_url = '<?= base_url() ?>';
 
     function edit_rpjmd(id) {
-        window.location = _base_url + 'rencanaPembangunan/c_rpjmd/edit/' + id;
+        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/edit/' + id;
     }
 
     function add_sub_program(id) {
-        window.location = _base_url + 'rencanaPembangunan/c_rpjmd/add_sub_program/' + id;
+        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/add_sub_program/' + id;
     }
 
     function show_detail_program(id) {
-        window.location = _base_url + 'rencanaPembangunan/c_rpjmd/show_detail_program/' + id;
+        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/show_detail_program/' + id;
     }
 
     function show_tree_rpjmd(id) {
-        window.location = _base_url + 'rencanaPembangunan/c_rpjmd/show_tree_rpjmd/' + id;
+        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/show_tree_rpjmd/' + id;
     }
 
     function btn(com, grid)
@@ -43,7 +48,7 @@ echo $js_grid;
 
         if (com == 'Add')
         {
-            window.location = _base_url + 'rencanaPembangunan/c_rpjmd/add';
+            window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/add';
         }
 
         if (com == 'Delete Selected Items')
@@ -90,10 +95,10 @@ echo $js_grid;
         document.getElementById("a-data-perencanaan").className = "collapsed active";
         document.getElementById("perencanaan").className = "collapsed active";
 
-        document.getElementById("a-data-rpjmd").className = "collapsed active";
-        document.getElementById("rpjmd").className = "collapsed active";
+        document.getElementById("a-data-rancangan_rpjm_desa").className = "collapsed active";
+        document.getElementById("rancangan_rpjm_desa").className = "collapsed active";
 
-        var d = document.getElementById("nav-list_rpjmd");
+        var d = document.getElementById("nav-list_rancangan_rpjm_desa");
         d.className = d.className + "active";
     }
 
