@@ -1,3 +1,6 @@
+<?php
+$attention_message = isset($attention_message) && $attention_message ? $attention_message : FALSE;
+?>
 <link href="<?= $this->config->item('base_url'); ?>css/flexigrid.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?= $this->config->item('base_url'); ?>js/jquery.pack.js"></script>
 <script type="text/javascript" src="<?= $this->config->item('base_url'); ?>js/flexigrid.pack.js"></script>
@@ -11,6 +14,11 @@
 <h3><?php echo $page_title; ?></h3>
 <h5><b><?php echo $deskripsi_title; ?></b></h5>
 <legend></legend>
+
+<?php
+echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : '';
+?>
+
 <?php
 echo $js_grid;
 ?>

@@ -1,12 +1,15 @@
+<?php
+$attention_message = isset($attention_message) && $attention_message ? $attention_message : FALSE;
+?>
+
 <h3><?= $page_title ?></h3>
 <h5><b><?= $deskripsi_title ?></b></h5>
 
 <?php
-$flashmessage = $this->session->flashdata('exist');
-echo!empty($flashmessage) ? '<p class="message">' . $flashmessage . '</p>' : '';
+echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : '';
 ?>
 
-<?php echo form_open_multipart('rencanaPembangunan/c_rancangan_rpjm_desa/import_excel/'); ?>
+<?php echo form_open_multipart('rencanaPembangunan/c_rancangan_rpjm_desa/import_excel/', array('id' => 'frmImportExcel')); ?>
 <legend></legend>
 <div class="form-group">
     <label class="col-md-3 control-label" for="file_excel"> Upload File Rancangan RPJM Desa *</label> 
@@ -42,5 +45,17 @@ echo!empty($flashmessage) ? '<p class="message">' . $flashmessage . '</p>' : '';
 // very simple to use!
     $(document).ready(function () {
         nav_active();
+
+        $("#simpan").click(function () {
+            if (confirm("Mohon tetap di halaman ini ketika proses sedang berjalan.\nProses Akan berhenti ketika anda berpindah halaman.\nAnda yakin akan mengimpor file ini ? ")) {
+                $(this).attr("disabled", true);
+                $(this).attr("value", "Tunggu .. ");
+
+                $("#batal").attr("disabled", true);
+                
+                $("#frmImportExcel").submit();
+            }
+        });
+
     });
 </script>
