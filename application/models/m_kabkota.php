@@ -67,9 +67,9 @@ class M_kabkota extends CI_Model {
         }
         return ($data);
     }
-    
-    function getArray($id_provinsi=FALSE) {
-        if(!$id_provinsi){
+
+    function getArray($id_provinsi = FALSE, $to_json = FALSE) {
+        if (!$id_provinsi) {
             return FALSE;
         }
         $this->db->select('id_kab_kota, nama_kab_kota');
@@ -79,8 +79,13 @@ class M_kabkota extends CI_Model {
 
         $arr_result = FALSE;
         if ($rs) {
+            $arr_result = array();
             foreach ($rs as $record) {
-                $arr_result[$record["id_kab_kota"]] = strtolower(trim($record["nama_kab_kota"]));
+                if ($to_json) {
+                    $arr_result[] = (object) array("id_kab_kota" => $record["id_kab_kota"], "nama_kab_kota" => strtolower(trim($record["nama_kab_kota"])));
+                } else {
+                    $arr_result[$record["id_kab_kota"]] = strtolower(trim($record["nama_kab_kota"]));
+                }
             }
         }
         return $arr_result;

@@ -3,28 +3,24 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class M_master_rancangan_rpjm_desa extends CI_Model {
+class M_master_rkp extends CI_Model {
 
     private $ci;
-    private $_table = 'tbl_rp_m_rancangan_rpjm_desa';
+    private $_table = 'tbl_rp_m_rkp';
     public $form_field_names = array(
-        'tahun_awal',
-        'tahun_akhir',
-        'id_provinsi',
-        'id_kab_kota',
-        'id_kecamatan',
-        'id_desa',
+        'id_m_rancangan_rpjm_desa',
+        'rkp_tahun',
         'kepala_desa',
         'disusun_oleh',
         'tanggal_disusun',
     );
-    public $array_total_bidang = array();
     public $post_data = array();
+    public $array_total_bidang = array();
 
     function __construct() {
         parent::__construct();
         $this->ci = get_instance();
-
+        
         $this->ci->config->load('rp_rancangan_rpjm_desa');
         $this->array_total_bidang = $this->ci->config->item('array_total_bidang');
     }
@@ -41,12 +37,12 @@ class M_master_rancangan_rpjm_desa extends CI_Model {
         return;
     }
 
-    public function getDetail($id_m_rancangan_rpjm_desa = FALSE, $returnArray = FALSE) {
-        if (!$id_m_rancangan_rpjm_desa) {
+    public function getDetail($id_m_rkp = FALSE, $returnArray = FALSE) {
+        if (!$id_m_rkp) {
             return FALSE;
         }
         $this->_setSelectAndJoin();
-        $query = $this->db->get_where($this->_table, array('id_m_rancangan_rpjm_desa' => $id_m_rancangan_rpjm_desa));
+        $query = $this->db->get_where($this->_table, array($this->_table . '.id_m_rkp' => $id_m_rkp));
 
         $detail = FALSE;
         if ($returnArray) {
@@ -65,10 +61,10 @@ class M_master_rancangan_rpjm_desa extends CI_Model {
         return $detail;
     }
 
-    public function isIdValid($id_m_rancangan_rpjm_desa = FALSE) {
+    public function isIdValid($id_m_rkp = FALSE) {
         $is_valid = FALSE;
-        if ($id_m_rancangan_rpjm_desa) {
-            $detail = $this->getDetail($id_m_rancangan_rpjm_desa);
+        if ($id_m_rkp) {
+            $detail = $this->getDetail($id_m_rkp);
 
             $is_valid = $detail != FALSE ? TRUE : FALSE;
             unset($detail);
@@ -81,17 +77,23 @@ class M_master_rancangan_rpjm_desa extends CI_Model {
         return $is_valid;
     }
 
-    public function setSubTotal($id_m_rancangan_rpjm_desa = FALSE, $id_bidang = FALSE, $sub_total = NULL) {
-        if ($id_m_rancangan_rpjm_desa) {
+    public function setSubTotal($id_m_rkp = FALSE, $id_bidang = FALSE, $sub_total = NULL) {
+        if ($id_m_rkp) {
+            
 
-            $detail = $this->getDetail($id_m_rancangan_rpjm_desa);
+            $detail = $this->getDetail($id_m_rkp);
+            
+            
             $selected_field_name = NULL;
             if ($id_bidang) {
                 $data = array(
                     $this->array_total_bidang[$id_bidang] => $sub_total
                 );
+                
+                
 
                 $selected_field_name = $this->array_total_bidang[$id_bidang];
+                
             }
 
             if ($detail) {
@@ -111,7 +113,7 @@ class M_master_rancangan_rpjm_desa extends CI_Model {
 
             unset($detail);
 
-            $this->update($data, $id_m_rancangan_rpjm_desa);
+            $this->update($data, $id_m_rkp);
             return TRUE;
         }
 
@@ -119,11 +121,11 @@ class M_master_rancangan_rpjm_desa extends CI_Model {
     }
 
     public function update($data, $id) {
-        $this->db->where($this->_table . '.id_m_rancangan_rpjm_desa', $id);
+        $this->db->where($this->_table . '.id_m_rkp', $id);
         $this->db->update($this->_table, $data);
     }
 
-    public function save($id_m_rancangan_rpjm_desa = FALSE) {
+    public function save($id_m_rkp = FALSE) {
         /**
          * Error Number :
          * 0 : tidak ada post data sama sekali
@@ -134,7 +136,7 @@ class M_master_rancangan_rpjm_desa extends CI_Model {
         $response = array(
             "post_data" => $this->post_data,
             "error_message" => "Tidak ada data yang dikirim.",
-            "inserted_id" => $id_m_rancangan_rpjm_desa,
+            "inserted_id" => $id_m_rkp,
             "error_number" => "0"
         );
 
@@ -147,29 +149,22 @@ class M_master_rancangan_rpjm_desa extends CI_Model {
                 $this->post_data['tanggal_disusun'] = sideka_format_date($this->post_data['tanggal_disusun']);
             }
 
-            $this->post_data['tahun_anggaran'] = $this->post_data['tahun_awal'] . ' - ' . $this->post_data['tahun_akhir'];
-
-
             $this->db->trans_off();
 
             $this->db->trans_begin();
             $this->db->trans_strict(FALSE);
-
-            $id = $id_m_rancangan_rpjm_desa;
-            if ($id_m_rancangan_rpjm_desa) {
+            if ($id_m_rkp) {
                 $response["error_message"] = "Perubahan ";
                 $response["error_number"] = "1.2";
 
-                $this->update($this->post_data, $id_m_rancangan_rpjm_desa);
+                $this->update($this->post_data, $id_m_rkp);
             } else {
                 $response["error_message"] = "Data baru ";
                 $response["error_number"] = "1.1";
 
                 $this->db->insert($this->_table, $this->post_data);
                 $response["inserted_id"] = $this->db->insert_id();
-                $id = $response["inserted_id"];
             }
-            $this->setSubTotal($id);
 
             $this->db->trans_complete();
             if ($this->db->trans_status() === FALSE) {
@@ -186,23 +181,24 @@ class M_master_rancangan_rpjm_desa extends CI_Model {
     }
 
     private function _setSelectAndJoin() {
-        $select = $this->_table . '.id_m_rancangan_rpjm_desa, ' .
-                $this->_table . '.tahun_awal, ' .
-                $this->_table . '.tahun_akhir, ' .
-                $this->_table . '.tahun_anggaran, ' .
-                $this->_table . '.nama_file, ' .
+        $select = $this->_table . '.id_m_rkp, ' .
+                $this->_table . '.id_m_rancangan_rpjm_desa, ' .
+                'tbl_rp_m_rancangan_rpjm_desa.tahun_awal, ' .
+                'tbl_rp_m_rancangan_rpjm_desa.tahun_akhir, ' .
+                'tbl_rp_m_rancangan_rpjm_desa.tahun_anggaran, ' .
                 $this->_table . '.total_bidang_1, ' .
                 $this->_table . '.total_bidang_2, ' .
                 $this->_table . '.total_bidang_3, ' .
                 $this->_table . '.total_bidang_4, ' .
                 $this->_table . '.total_keseluruhan, ' .
+                $this->_table . '.rkp_tahun, ' .
                 $this->_table . '.tanggal_disusun, ' .
                 $this->_table . '.disusun_oleh, ' .
                 $this->_table . '.kepala_desa, ' .
-                $this->_table . '.id_desa, ' .
-                $this->_table . '.id_kecamatan, ' .
-                $this->_table . '.id_kab_kota, ' .
-                $this->_table . '.id_provinsi, ' .
+                'tbl_rp_m_rancangan_rpjm_desa.id_desa, ' .
+                'tbl_rp_m_rancangan_rpjm_desa.id_kecamatan, ' .
+                'tbl_rp_m_rancangan_rpjm_desa.id_kab_kota, ' .
+                'tbl_rp_m_rancangan_rpjm_desa.id_provinsi, ' .
                 'ref_desa.nama_desa, ' .
                 'ref_kecamatan.nama_kecamatan, ' .
                 'ref_kab_kota.nama_kab_kota, ' .
@@ -210,10 +206,15 @@ class M_master_rancangan_rpjm_desa extends CI_Model {
 
         $this->db->select($select);
 
-        $this->db->join('ref_desa', 'ref_desa.id_desa = ' . $this->_table . '.id_desa');
-        $this->db->join('ref_kecamatan', 'ref_kecamatan.id_kecamatan = ' . $this->_table . '.id_kecamatan');
-        $this->db->join('ref_kab_kota', 'ref_kab_kota.id_kab_kota = ' . $this->_table . '.id_kab_kota');
-        $this->db->join('ref_provinsi', 'ref_provinsi.id_provinsi = ' . $this->_table . '.id_provinsi');
+        $this->_join();
+    }
+
+    private function _join() {
+        $this->db->join('tbl_rp_m_rancangan_rpjm_desa', 'tbl_rp_m_rancangan_rpjm_desa.id_m_rancangan_rpjm_desa = ' . $this->_table . '.id_m_rancangan_rpjm_desa');
+        $this->db->join('ref_desa', 'ref_desa.id_desa = tbl_rp_m_rancangan_rpjm_desa.id_desa');
+        $this->db->join('ref_kecamatan', 'ref_kecamatan.id_kecamatan = tbl_rp_m_rancangan_rpjm_desa.id_kecamatan');
+        $this->db->join('ref_kab_kota', 'ref_kab_kota.id_kab_kota = tbl_rp_m_rancangan_rpjm_desa.id_kab_kota');
+        $this->db->join('ref_provinsi', 'ref_provinsi.id_provinsi = tbl_rp_m_rancangan_rpjm_desa.id_provinsi');
     }
 
     function getArray($from_year = FALSE) {
@@ -255,8 +256,8 @@ class M_master_rancangan_rpjm_desa extends CI_Model {
         $return['records'] = $this->db->get();
 
         //Build count query
-        $this->db->select("count(" . $this->_table . ".id_m_rancangan_rpjm_desa) as record_count")->from($this->_table);
-
+        $this->db->select("count(" . $this->_table . ".id_m_rkp) as record_count")->from($this->_table);
+        $this->_join();
         $this->ci->flexigrid->build_query(FALSE);
         $record_count = $this->db->get();
         $row = $record_count->row();
