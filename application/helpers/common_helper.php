@@ -41,3 +41,16 @@ if (!function_exists('_format_number')) {
     }
 
 }
+
+
+if(!function_exists('sideka_format_date')){
+    function sideka_format_date($string_date = FALSE, $for_mysql = TRUE, $app_date_format = 'd-m-Y'){
+        if($string_date && $string_date != '' && $for_mysql){
+            return strtotime($string_date) ? date('Y-m-d',strtotime($string_date)) : FALSE;
+        }
+        else if($string_date && $string_date != '' && !$for_mysql){
+            return strtotime($string_date) ? date($app_date_format,strtotime($string_date)) : FALSE;
+        }
+        return FALSE;
+    }
+}
