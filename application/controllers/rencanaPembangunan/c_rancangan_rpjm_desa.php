@@ -16,8 +16,12 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
     function __construct() {
         parent::__construct('Rancangan RPJM Desa', 'v_rencanaPembangunan');
 
-        $this->load->helper('flexigrid_helper');
+        $this->load->helper(array('flexigrid_helper', 'common_helper'));
         $this->config->load('rp_rancangan_rpjm_desa');
+        $this->load->model(array(
+            'rencanaPembangunan/m_rancangan_rpjm_desa',
+            'rencanaPembangunan/m_master_rancangan_rpjm_desa',
+            'rencanaPembangunan/m_bidang'));
     }
 
     public function detail($id) {
@@ -40,7 +44,6 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
         $this->load->library('flexigrid');
         $this->load->helper('common_helper');
         $valid_fields = array('id_rancangan_rpjm_desa');
-        $this->load->model('rencanaPembangunan/m_rancangan_rpjm_desa');
 
         $this->flexigrid->validate_post('id_m_rancangan_rpjm_desa', 'ASC', $valid_fields);
 
@@ -93,7 +96,7 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
         $buttons = $r_m_rpjm_desa_config['buttons'];
         $gridParams = $r_m_rpjm_desa_config['gridParams'];
 
-        $grid_js = build_grid_js('flex1', site_url('rencanaPembangunan/c_rancangan_rpjm_desa/load_data_master'), $colModelM, 'id_m_rancangan_rpjm_desa', 'asc', $gridParams, $buttons);
+        $grid_js = build_grid_js('flex1', site_url('rencanaPembangunan/c_rancangan_rpjm_desa/load_data_master'), $colModelM, 'id_m_rancangan_rpjm_desa', 'desc', $gridParams, $buttons);
 
         $attention_message = $this->session->flashdata('attention_message');
         $this->set('attention_message', $attention_message);
@@ -103,7 +106,6 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
 
     public function load_data_master() {
         $this->load->library('flexigrid');
-        $this->load->helper('common_helper');
         $valid_fields = array('id_m_rancangan_rpjm_desa');
 
         $this->load->model('rencanaPembangunan/m_master_rancangan_rpjm_desa');
@@ -138,9 +140,16 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
                 $row->nama_kab_kota,
                 $row->id_provinsi,
                 $row->nama_provinsi,
-                '<button type="submit" class="btn btn-info btn-xs" title="Tampil Detil Program" onclick="show_detail_program(\'' . $row->id_m_rancangan_rpjm_desa . '\')"/>
-				<i class="fa fa-eye"></i>
-				</button>'
+                '<button id="anchor_detail_' . $row->id_m_rancangan_rpjm_desa . '" type="button" class="btn btn-primary btn-xs btn_add_detail" onclick="add_detail(this);" title="Tambah Detail RPJM" />' .
+                '<i class="fa fa-plus"></i>' .
+                '</button>&nbsp;' .
+                '<button type="submit" class="btn btn-info btn-xs" title="Tampil Detil RPJM" onclick="show_detail_program(\'' . $row->id_m_rancangan_rpjm_desa . '\')"/>' .
+                '<i class="fa fa-list-alt"></i>' .
+                '</button>&nbsp;' .
+                /**
+                 * @todo Buat generate excel untuk rpjm
+                 */
+                ($row->nama_file != '' && $row->nama_file != NULL ? '<a  title="Download Excel" href="' . base_url() . 'uploads/temp_upload_excel/rpjm/' . $row->nama_file . '" class="btn btn-success btn-xs"><i class="fa fa-file-excel-o"></i></a>' : '')
             );
         }
         //Print please
@@ -163,7 +172,7 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
         $this->set('deskripsi_title', 'Rencana Pembangunan Jangka Menengah Daerah');
     }
 
-    public function import_excel() {
+    public function execute_import_excel() {
         $config['upload_path'] = "./uploads/temp_upload_excel/rpjm/";
         $config['allowed_types'] = "xls|xlsx";
 
@@ -177,10 +186,6 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
 
             $is_upload_ok = $this->l_read_rancangan_rpjm_desa->upload_excel('file_excel');
 
-            /**
-             * @todo Simpan Master untuk rancangan rpjm desa
-             * @todo Simpan informasi Desa, Kecamatan, Kabupaten, dan Provinsi pada Master
-             */
             $save_content_status = $this->l_read_rancangan_rpjm_desa->save_content_excel();
 
             if ($save_content_status) {
@@ -195,9 +200,105 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
         }
     }
 
-    public function add() {
+    public function import_excel() {
         $attention_message = $this->session->flashdata('attention_message');
         $this->set('attention_message', $attention_message);
+    }
+
+    public function data_not_found() {
+        $this->session->set_flashdata('attention_message', 'Maaf, Data tidak ditemukan.');
+        redirect('rencanaPembangunan/c_rancangan_rpjm_desa', 'refresh');
+    }
+
+    public function add_detail($id_m_rancangan_rpjm_desa = FALSE, $id_rancangan_rpjm_desa = FALSE) {
+        
+        $post_data = array();
+        $attention_message = "";
+
+
+        if (!$id_m_rancangan_rpjm_desa || !$this->m_master_rancangan_rpjm_desa->isIdValid($id_m_rancangan_rpjm_desa)) {
+            $this->session->set_flashdata('attention_message', 'Maaf, RPJM tidak ditemukan.');
+            redirect('rencanaPembangunan/c_rancangan_rpjm_desa', 'refresh');
+        }
+
+        if (count($_POST) > 0 && $this->m_rancangan_rpjm_desa->getPostData($id_m_rancangan_rpjm_desa)) {
+            
+            $detail_master_rpjm = $this->m_master_rancangan_rpjm_desa->getDetail($id_m_rancangan_rpjm_desa);
+            $this->m_rancangan_rpjm_desa->calculateTahunPelaksanaan($detail_master_rpjm->tahun_awal);
+            unset($detail_master_rpjm);
+            
+            $response = $this->m_rancangan_rpjm_desa->save($id_rancangan_rpjm_desa);
+            
+            $this->m_master_rancangan_rpjm_desa->setSubTotal($id_m_rancangan_rpjm_desa);
+            
+            if($response["error_number"] != '0'){
+               $sub_total = $this->m_rancangan_rpjm_desa->reCalculateSubTotal($id_m_rancangan_rpjm_desa, $response["post_data"]["id_bidang"]);
+
+               if($sub_total){
+                   $this->m_master_rancangan_rpjm_desa->setSubTotal($id_m_rancangan_rpjm_desa, $response["post_data"]["id_bidang"], $sub_total);
+               }
+            }
+            
+            $attention_message = $response["message_error"];
+            if ($response["error_number"] != '0' && $id_rancangan_rpjm_desa) {
+                redirect('rencanaPembangunan/c_rancangan_rpjm_desa');
+            } elseif ($response["error_number"] != '0' && !$id_rancangan_rpjm_desa) {
+                redirect('rencanaPembangunan/c_rancangan_rpjm_desa/add_detail');
+            }
+            $post_data = $response["post_data"];
+        } elseif (count($_POST) == 0 && $id_rancangan_rpjm_desa) {
+            $post_data = $this->m_rancangan_rpjm_desa->getDetail($id_rancangan_rpjm_desa, TRUE);
+
+            if (!$post_data || empty($post_data)) {
+                $this->session->set_flashdata('attention_message', 'Maaf, Data tidak ditemukan.');
+                redirect('rencanaPembangunan/c_rancangan_rpjm_desa', 'refresh');
+            }
+        }
+
+        $id_master_not_found = $this->session->flashdata('id_master_not_found');
+        if (empty($post_data) && $id_master_not_found) {
+            $this->session->set_flashdata('attention_message', 'Maaf, Data tidak ditemukan.');
+            redirect('rencanaPembangunan/c_rancangan_rpjm_desa', 'refresh');
+        }
+        
+        $top_bidang = $this->m_bidang->getTopLevelBidang();
+
+        $this->set('js_general_helper', $this->load->view('rencanaPembangunan/rancangan_rpjm_desa/js/general_helper', array(), TRUE));
+        $this->set('deskripsi_title', 'Formulir Detail RPJM Desa');
+        $this->set('attention_message', $attention_message);
+        $this->set('id_m_rancangan_rpjm_desa', $id_m_rancangan_rpjm_desa);
+        $this->set('top_bidang', $top_bidang);
+    }
+
+    public function add($id_m_rancangan_rpjm_desa = FALSE) {
+        $post_data = array();
+        $attention_message = "";
+        if (count($_POST) > 0) {
+            $this->m_master_rancangan_rpjm_desa->getPostData();
+            $response = $this->m_master_rancangan_rpjm_desa->save($id_m_rancangan_rpjm_desa);
+            $attention_message = $response["message_error"];
+            if ($response["error_number"] != '0' && $id_m_rancangan_rpjm_desa) {
+                redirect('rencanaPembangunan/c_rancangan_rpjm_desa');
+            } elseif ($response["error_number"] != '0' && !$id_m_rancangan_rpjm_desa) {
+                redirect('rencanaPembangunan/c_rancangan_rpjm_desa/add_detail');
+            }
+            $post_data = $response["post_data"];
+        } elseif (count($_POST) == 0 && $id_m_rancangan_rpjm_desa) {
+            $post_data = $this->m_master_rancangan_rpjm_desa->getDetail($id_m_rancangan_rpjm_desa, TRUE);
+
+            if (!$post_data || empty($post_data)) {
+                $this->session->set_flashdata('attention_message', 'Maaf, Data tidak ditemukan.');
+                redirect('rencanaPembangunan/c_rancangan_rpjm_desa', 'refresh');
+            }
+        }
+
+        $this->load->model('m_provinsi');
+
+        $arr_provinsi = $this->m_provinsi->getArray();
+        $this->set('arr_provinsi', $arr_provinsi);
+        $this->set('post_data', $post_data);
+        $this->set('attention_message', $attention_message);
+        $this->set('id_m_rancangan_rpjm_desa', $id_m_rancangan_rpjm_desa);
     }
 
 }

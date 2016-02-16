@@ -12,6 +12,7 @@ class C_baseRencanaPembangunan extends CI_Controller {
     protected $_data_view = array();
     protected $_action;
     protected $_page_title;
+    protected $_name;
 
     function __construct($page_title = 'Rencana Pembangunan', $menu = 'v_rencanaPembangunan') {
         parent::__construct();
@@ -33,6 +34,8 @@ class C_baseRencanaPembangunan extends CI_Controller {
         $this->set('konten_logo', $this->m_logo->getLogo());
 
         $this->set('page_title', $page_title);
+        
+        $this->set('controller_name', $this->_name);
 
         $menu = 'menu/' . $menu;
         $this->set('menu', $this->load->view($menu, array(), TRUE));
