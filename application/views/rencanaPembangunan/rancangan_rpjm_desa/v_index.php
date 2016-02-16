@@ -18,6 +18,9 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
 echo $js_grid;
 ?>
 
+<form id="frmAddDetail" style="visibility: hidden;" method="POST" action="<?php echo site_url("rencanaPembangunan/c_rancangan_rpjm_desa/add_detail/"); ?>">
+    <input type="hidden" id="mId" name="mId" value="" />
+</form>
 <script type="text/javascript">
     var _base_url = '<?= base_url() ?>';
 
@@ -25,8 +28,8 @@ echo $js_grid;
     function show_detail_program(id) {
         window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/detail/' + id;
     }
-    
-    function download_excel(id){
+
+    function download_excel(id) {
         window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/download_excel/' + id;
     }
 
@@ -42,7 +45,12 @@ echo $js_grid;
             $('.bDiv tbody tr', grid).removeClass('trSelected');
         }
 
-        if (com == 'Add')
+        if (com == 'Import Excel')
+        {
+            window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/import_excel';
+        }
+
+        if (com == 'Tambah')
         {
             window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/add';
         }
@@ -75,6 +83,12 @@ echo $js_grid;
         }
     }
 
+    function add_detail(self) {
+        var sId = self.id.split('_'), mId = sId[2];
+
+        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/add_detail/' + mId;
+    }
+
     $(function () {
 
     });
@@ -85,7 +99,7 @@ echo $js_grid;
 </p>
 <span class="help-block">
 
-    <a href="<?php echo base_url().'uploads/temp_upload_excel/rpjm/template/RPJMTemplate.xls'; ?>" class="btn btn-success">Download Template RPJM</a>
+    <a href="<?php echo base_url() . 'uploads/temp_upload_excel/rpjm/template/RPJMTemplate.xls'; ?>" class="btn btn-success">Download Template RPJM</a>
 
 </span>
 
@@ -93,7 +107,7 @@ echo $js_grid;
 
 
 
-<script>
+<script type="text/javascript">
     function nav_active() {
 
         document.getElementById("a-data-perencanaan").className = "collapsed active";
@@ -105,9 +119,11 @@ echo $js_grid;
         var d = document.getElementById("nav-list_rancangan_rpjm_desa");
         d.className = d.className + "active";
     }
+    ;
 
 // very simple to use!
     $(document).ready(function () {
         nav_active();
+
     });
 </script>
