@@ -40,8 +40,13 @@ class l_read_rancangan_rpjm_desa {
     public $tahun_anggaran_awal = NULL;
     public $tahun_anggaran_akhir = NULL;
     public $rpjm_datas = array();
+
+    /**
+     * Sesuaikan dengan field name pada tabel tbl_rp_rancangan_rpjm_desa
+     * @var type
+     */
     public $rpjm_row_template = array(
-        "bidang" => NULL,
+//        "bidang" => NULL,
         "sub_bidang" => NULL,
         "jenis_kegiatan" => NULL,
         "lokasi_rt_rw" => NULL,
@@ -58,13 +63,16 @@ class l_read_rancangan_rpjm_desa {
         "swakelola" => NULL,
         "kerjasama_antar_desa" => NULL,
         "kerjasama_pihak_ketiga" => NULL,
-        "tahun_awal" => NULL,
-        "tahun_akhir" => NULL,
         "id_bidang" => NULL,
         "id_coa" => NULL,
         "id_tahun_anggaran" => NULL,
         "id_m_rancangan_rpjm_desa" => NULL
     );
+
+    /**
+     * Sesuaikan dengan field name pada tabel tbl_rp_m_rancangan_rpjm_desa
+     * @var type 
+     */
     public $master_rpjm_row_template = array(
         "tahun_awal" => NULL,
         "tahun_akhir" => NULL,
@@ -251,9 +259,9 @@ class l_read_rancangan_rpjm_desa {
         }
         return FALSE;
     }
-    
-    public function update_master_rpjm($data = FALSE){
-        if($data && $this->id_master_rancangan_rpjm){
+
+    public function update_master_rpjm($data = FALSE) {
+        if ($data && $this->id_master_rancangan_rpjm) {
             $this->_ci->db->where('id_m_rancangan_rpjm_desa', $this->id_master_rancangan_rpjm);
             $this->_ci->db->update('tbl_rp_m_rancangan_rpjm_desa', $data);
             return TRUE;
@@ -304,7 +312,7 @@ class l_read_rancangan_rpjm_desa {
             $last_sub_bidang = '';
 
             $master_rpjm = $this->master_rpjm_row_template;
-            
+
             $master_rpjm["nama_file"] = $this->upload_data['file_name_uploaded'];
 
             $this->_ci->db->trans_off();
@@ -325,16 +333,16 @@ class l_read_rancangan_rpjm_desa {
                 $id_kab_kota = FALSE;
                 $id_kecamatan = FALSE;
                 $id_desa = FALSE;
-                
+
                 $master_rpjm["tahun_awal"] = intval(trim($this->tahun_anggaran_awal));
                 $master_rpjm["tahun_akhir"] = intval(trim($this->tahun_anggaran_akhir));
-                $master_rpjm["tahun_anggaran"] = trim($this->tahun_anggaran_awal)." - ".trim($this->tahun_anggaran_akhir);
+                $master_rpjm["tahun_anggaran"] = trim($this->tahun_anggaran_awal) . " - " . trim($this->tahun_anggaran_akhir);
 
                 if ($arr_provinsi) {
                     $id_provinsi = $this->get_nearest_word($nama_provinsi, $arr_provinsi, TRUE);
                     $master_rpjm["id_provinsi"] = $id_provinsi != 0 ? $id_provinsi : NULL;
 
-                    
+
 
                     $arr_kota = $this->get_array_kota($id_provinsi);
                     if ($arr_kota) {
@@ -362,6 +370,8 @@ class l_read_rancangan_rpjm_desa {
                     $this->id_master_rancangan_rpjm = $this->save_master_rpjm($master_rpjm);
                 }
 
+                $bidang = NULL;
+
                 for ($i = 12; $i <= $this->excel_content['numRows']; $i++) {
 
                     /**
@@ -385,17 +395,24 @@ class l_read_rancangan_rpjm_desa {
                      */
                     if (count($this->excel_content['cells'][$i]) > 2) {
                         $current_row = $this->rpjm_row_template;
-                        $current_row["bidang"] = $this->get_cell_value($i, 2, '');
+
+                        if (is_null($bidang)) {
+                            $bidang = $this->get_cell_value($i, 2, '');
+                        }else{
+                            $new_bidang = $this->get_cell_value($i, 2, '');
+                            if($new_bidang){
+                                $bidang = $new_bidang;
+                            }
+                        }
                         $current_row["sub_bidang"] = $this->get_cell_value($i, 4, '');
                         $current_row["jenis_kegiatan"] = $this->get_cell_value($i, 5, '');
 
-                        if (!$current_row["bidang"] && $current_row["jenis_kegiatan"]) {
-                            $current_row["bidang"] = $last_bidang;
-                        } else {
-                            $current_row["bidang"] = addslashes($current_row["bidang"]);
-                        }
-
-                        $last_bidang = $current_row["bidang"];
+//                        if (!$current_row["bidang"] && $current_row["jenis_kegiatan"]) {
+//                            $current_row["bidang"] = $last_bidang;
+//                        } else {
+//                            $current_row["bidang"] = addslashes($current_row["bidang"]);
+//                        }
+//                        $last_bidang = $current_row["bidang"];
 
                         if (!$current_row["sub_bidang"] && $current_row["jenis_kegiatan"]) {
                             $current_row["sub_bidang"] = $last_sub_bidang;
@@ -426,9 +443,9 @@ class l_read_rancangan_rpjm_desa {
                         $current_row["swakelola"] = $this->cell_have_value($i, 17, '');
                         $current_row["kerjasama_antar_desa"] = $this->cell_have_value($i, 18, '');
                         $current_row["kerjasama_pihak_ketiga"] = $this->cell_have_value($i, 19, '');
-                        $current_row["tahun_awal"] = intval(trim($this->tahun_anggaran_awal));
-                        $current_row["tahun_akhir"] = intval(trim($this->tahun_anggaran_akhir));
-                        $current_row["id_bidang"] = $this->get_nearest_word($current_row["bidang"], $top_level_bidang, TRUE);
+//                        $current_row["tahun_awal"] = intval(trim($this->tahun_anggaran_awal));
+//                        $current_row["tahun_akhir"] = intval(trim($this->tahun_anggaran_akhir));
+                        $current_row["id_bidang"] = $this->get_nearest_word($bidang, $top_level_bidang, TRUE);
                         if (!$current_row["id_bidang"]) {
                             $current_row["id_bidang"] = NULL;
 //                        unset($current_row["id_bidang"]);
@@ -449,7 +466,7 @@ class l_read_rancangan_rpjm_desa {
                         }
                     }
                 }
-                
+
                 $this->update_master_rpjm($master_rpjm);
 
                 if ($save_data) {
