@@ -5,10 +5,10 @@ if (!defined('BASEPATH'))
 
 
 $config['array_total_bidang'] = array(
-    21 => "total_bidang_1",
-    22 => "total_bidang_2",
-    23 => "total_bidang_3",
-    24 => "total_bidang_4",
+    '2.1' => "total_bidang_1",
+    '2.2' => "total_bidang_2",
+    '2.3' => "total_bidang_3",
+    '2.4' => "total_bidang_4",
 );
 /**
  * 
@@ -30,7 +30,7 @@ $config['rp_rancangan_rpjm_desa'] = array(
         'tahun_pelaksanaan_4' => array('Tahun<br />Pelaksanaan 4', 50, TRUE, 'center', 2),
         'tahun_pelaksanaan_5' => array('Tahun<br />Pelaksanaan 5', 50, TRUE, 'center', 2),
         'tahun_pelaksanaan_6' => array('Tahun<br />Pelaksanaan 6', 50, TRUE, 'center', 2),
-        'jumlah_biaya' => array('Prakiraan<br />Jumlah Biaya<br />(Rp)', 80, TRUE, 'center', 2),
+        'jumlah_biaya' => array('Prakiraan<br />Jumlah Biaya<br />(Rp)', 80, TRUE, 'right', 2),
         'sumber_dana' => array('Sumber<br />Pembiayaan', 100, TRUE, 'center', 2),
         'pelaksanaan_swakelola' => array('Swakelola', 100, TRUE, 'center', 2),
         'pelaksanaan_kerjasama_antar_desa' => array('Kerjasama<br />Antar Desa', 100, TRUE, 'center', 2),
@@ -59,10 +59,10 @@ $config['rp_master_rancangan_rpjm_desa'] = array(
         'tahun_akhir' => array('Tahun Akhir', 120, TRUE, 'center', 2, 1),
         'tahun_anggaran' => array('Tahun Anggaran', 120, TRUE, 'center', 2),
         'nama_file' => array('Nama File', 120, TRUE, 'center', 2, 1),
-        'total_bidang_1' => array('Total Bidang 1', 60, TRUE, 'center', 2),
-        'total_bidang_2' => array('Total Bidang 2', 60, TRUE, 'center', 2),
-        'total_bidang_3' => array('Total Bidang 3', 120, TRUE, 'center', 2),
-        'total_bidang_4' => array('Total Bidang 4', 50, TRUE, 'center', 2),
+        'total_bidang_1' => array('Total Bidang 1', 60, TRUE, 'right', 2),
+        'total_bidang_2' => array('Total Bidang 2', 60, TRUE, 'right', 2),
+        'total_bidang_3' => array('Total Bidang 3', 120, TRUE, 'right', 2),
+        'total_bidang_4' => array('Total Bidang 4', 50, TRUE, 'right', 2),
         'total_keseluruhan' => array('Total Jumlah', 80, TRUE, 'center', 2),
         'tanggal_disusun' => array('Tanggal Disusun', 100, TRUE, 'center', 2, 1),
         'disusun_oleh' => array('Disusun Oleh', 100, TRUE, 'center', 2, 1),
