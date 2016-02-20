@@ -3,7 +3,7 @@
  * Index RKP
  */
 $attention_message = isset($attention_message) && $attention_message ? $attention_message : FALSE;
-$controller_name = isset($controller_name) ? $controller_name : 'c_apbdes';
+$controller_name = isset($controller_name) ? $controller_name : 'c_rkp';
 ?>
 <link href="<?php echo $this->config->item('base_url'); ?>css/flexigrid.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?= $this->config->item('base_url'); ?>js/jquery.pack.js"></script>
@@ -47,6 +47,11 @@ echo $js_grid;
         if (com == 'DeSelect All')
         {
             $('.bDiv tbody tr', grid).removeClass('trSelected');
+        }
+
+        if (com == 'Import Excel')
+        {
+            window.location = _base_url + 'rencanaPembangunan/<?php echo $controller_name; ?>/import_excel';
         }
 
         if (com == 'Tambah')
@@ -94,6 +99,12 @@ echo $js_grid;
 </script>
 
 <table id="flex1" style="display:none"></table>
+
+<span class="help-block">
+
+    <a href="<?php echo base_url().'rencanaPembangunan/c_apbdes'; ?>" class="btn btn-danger">Kembali</a>
+
+</span>
 
 <script type="text/javascript">
     function nav_active() {

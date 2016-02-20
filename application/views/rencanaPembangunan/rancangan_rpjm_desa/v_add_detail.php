@@ -1,10 +1,9 @@
 <?php
 $attention_message = isset($attention_message) && $attention_message ? $attention_message : FALSE;
 $post_data = isset($post_data) ? $post_data : FALSE;
-$top_bidang = isset($top_bidang) ? $top_bidang : FALSE;
 $id_m_rancangan_rpjm_desa = isset($id_m_rancangan_rpjm_desa) ? $id_m_rancangan_rpjm_desa : FALSE;
 ?>
-
+<link href="<?php echo base_url(); ?>assetku/js/plugins/select2/css/select2.min.css" rel="stylesheet">
 <h3><?= $page_title ?></h3>
 <h5><b><?= $deskripsi_title ?></b></h5>
 
@@ -14,38 +13,14 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
 
 <?php echo form_open_multipart('rencanaPembangunan/c_rancangan_rpjm_desa/add_detail/' . $id_m_rancangan_rpjm_desa, array('id' => 'frmTambahDetailRPJM')); ?>
 <legend></legend>
-<div class="form-group">
-    <label class="col-md-3 control-label" for="id_provinsi"> Bidang *</label>
-    <div id="divRadioBidang"  class="col-md-9">
-        <?php if ($top_bidang): ?>
-            <?php foreach ($top_bidang as $key => $bidang): ?>
-        <input type="radio" value="<?php echo $bidang["id_bidang"]; ?>" name="id_bidang" id="bidang_1" autocomplete="off" checked> <?php echo ucwords(strtolower($bidang["deskripsi"])); ?>
-                <br />
-            <?php endforeach; ?>
-        <?php else: ?>
-            Bidang tidak ditemukan
-        <?php endif; ?>
-    </div>
-    <span class="help-block">
-        <div class="dvAlert"></div>
-    </span>
-</div>
-<div class="form-group">&nbsp;</div>
-
-<div class="form-group">
-    <label class="col-md-3 control-label" for="sub_bidang"> Sub Bidang *</label>
-    <div class="col-md-9">
-        <input class="form-control input-md required" type="text" name="sub_bidang" id="sub_bidang" size="80" value="<?php echo $post_data ? $post_data["sub_bidang"] : ''; ?>"   />
-        <span class="help-block">
-            <div class="dvAlert"></div>
-        </span>
-    </div>
-</div>
 
 <div class="form-group">
     <label class="col-md-3 control-label" for="jenis_kegiatan"> Jenis Kegiatan *</label>
     <div class="col-md-9">
-        <input class="form-control input-md required" type="text" name="jenis_kegiatan" id="jenis_kegiatan" size="80" value="<?php echo $post_data ? $post_data["jenis_kegiatan"] : ''; ?>"   />
+        <select name="id_coa" id="jenis_kegiatan">
+            <option></option>>
+        </select>
+        <!--<input class="form-control input-md required" type="text" name="jenis_kegiatan" id="jenis_kegiatan" size="80" value="<?php echo $post_data ? $post_data["jenis_kegiatan"] : ''; ?>"   />-->
         <span class="help-block">
             <div class="dvAlert"></div>
         </span>
@@ -123,7 +98,9 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
 <div class="form-group">
     <label class="col-md-3 control-label" for="sumber_dana"> Sumber Dana *</label>
     <div class="col-md-9">
-        <input class="form-control input-md required" type="text" name="sumber_dana" id="sumber_dana" size="80" <?php echo $post_data ? $post_data["tanggal_disusun"] : ''; ?>  />
+        <select name="id_sumber_dana_desa" id="sumber_dana">
+            <option></option>>
+        </select>
         <span class="help-block">
             <div class="dvAlert"></div>
         </span>
@@ -158,6 +135,7 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
 <?php
 echo isset($js_general_helper) ? $js_general_helper : '';
 ?>
+<script type="text/javascript" src="<?php echo base_url(); ?>assetku/js/plugins/select2/js/select2.full.min.js"></script>
 <script>
     function nav_active() {
 
@@ -165,10 +143,6 @@ echo isset($js_general_helper) ? $js_general_helper : '';
         document.getElementById("perencanaan").className = "collapsed active";
 
         document.getElementById("a-data-rancangan_rpjm_desa").className = "collapsed active";
-        document.getElementById("rancangan_rpjm_desa").className = "collapsed active";
-
-        var d = document.getElementById("nav-list_rancangan_rpjm_desa");
-        d.className = d.className + "active";
     }
 
 
@@ -204,5 +178,17 @@ echo isset($js_general_helper) ? $js_general_helper : '';
             return false;
         });
 
+
+        var jenisKegiatan = <?php echo isset($json_jenis_kegiatan) ? $json_jenis_kegiatan : '{}'; ?>;
+        $("#jenis_kegiatan").select2({
+            placeholder: "Pilih Jenis Kegiatan",
+            data: jenisKegiatan
+        });
+
+        var sumberDana = <?php echo isset($json_sumber_dana) ? $json_sumber_dana : '{}'; ?>;
+        $("#sumber_dana").select2({
+            placeholder: "Pilih Sumber Dana",
+            data: sumberDana
+        });
     });
 </script>

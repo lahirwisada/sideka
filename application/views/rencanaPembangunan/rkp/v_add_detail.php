@@ -9,7 +9,7 @@ $master_rpjm = isset($master_rpjm) ? $master_rpjm : FALSE;
 $bidang = isset($bidang) ? $bidang : FALSE;
 
 $id_m_rkp = isset($id_m_rkp) ? $id_m_rkp : '';
-$form_url = 'rencanaPembangunan/'.$controller_name.'/add_detail/' . $id_m_rkp;
+$form_url = 'rencanaPembangunan/' . $controller_name . '/add_detail/' . $id_m_rkp;
 ?>
 
 <h3><?= $page_title ?></h3>
@@ -29,8 +29,8 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
         <select  class="form-control required" id="slc_bidang" name="id_bidang" aria-describedby="hlpBlock1">
             <option value="">-- Pilih Bidang --</option>
             <?php if ($bidang): ?>
-                <?php foreach ($bidang as $key => $record_bidang): ?>
-                    <option value="<?php echo $record_bidang["id_bidang"]; ?>"><?php echo ucwords(strtolower($record_bidang["deskripsi"])); ?></option>
+                <?php foreach ($bidang as $key => $deskripsi): ?>
+                    <option value="<?php echo $key; ?>"><?php echo ucwords(strtolower($deskripsi)); ?></option>
                 <?php endforeach; ?>
             <?php else: ?>
                 <option value=""></option>
@@ -181,15 +181,15 @@ echo isset($js_rkp_add_detail) ? $js_rkp_add_detail : '';
             formvalid = formvalid && ValidateInput("inp_volume", "dvAlertinp_volume", "Volume harus diisi");
             formvalid = formvalid && ValidateInput("inp_waktu_pelaksanaan", "dvAlertdvAlertinp_waktu_pelaksanaan", "Waktu Pelaksanaan harus diisi");
             formvalid = formvalid && ValidateInput("inp_jumlah_biaya", "dvAlertinp_jumlah_biaya", "Jumlah Biaya harus diisi");
-            
+
             var optMetodePelaksanaanOk = $("#swakelola").attr("checked") || $("#kerjasama_antar_desa").attr("checked") || $("#kerjasama_pihak_ketiga").attr("checked");
-            
-            
+
+
             console.log(optMetodePelaksanaanOk);
-            if(!optMetodePelaksanaanOk){
+            if (!optMetodePelaksanaanOk) {
                 $("#dvAlertPolaPelaksanaan").append("Salah satu harus dipilih");
             }
-            
+
 
             if (formvalid) {
                 if (confirm("Mohon tetap di halaman ini ketika proses sedang berjalan.\nProses Akan berhenti ketika anda berpindah halaman.Hendaknya memeriksa kembali sebelum melakukan simpan data.\n\nAnda yakin akan melanjutkan ? ")) {
@@ -208,12 +208,19 @@ echo isset($js_rkp_add_detail) ? $js_rkp_add_detail : '';
             if (!$.isEmptyObject(rpjm)) {
 
                 var val = $(this).val(), arr_rpjm = val in rpjm ? rpjm[val] : null;
+
                 ResetInputSelect($("#slc_id_rancangan_rpjm_desa"));
+
+                console.log(val, arr_rpjm, rpjm);
 
                 if (arr_rpjm != null) {
                     var opt = '';
-                    $.each(arr_rpjm, function (index, option) {
-                        opt += '<option value=\'' + option.id_rancangan_rpjm_desa + '\'>' + option.jenis_kegiatan + '</option>';
+                    $.each(arr_rpjm, function (index, options) {
+                        if (options.length > 0) {
+                            $.each(options, function (index, option) {
+                                opt += '<option value=\'' + option.id_rancangan_rpjm_desa + '\'>' + option.jenis_kegiatan + '; ' + option.lokasi_rt_rw + '; ' + option.prakiraan_volume + '</option>';
+                            });
+                        }
                     });
 
                     $("#slc_id_rancangan_rpjm_desa").append(opt);
@@ -231,12 +238,18 @@ echo isset($js_rkp_add_detail) ? $js_rkp_add_detail : '';
                 var valBidang = $("#slc_bidang").val(), arr_rpjm = valBidang in rpjm ? rpjm[valBidang] : null, idRancanganRpjmDesa = $(this).val(), jumlahBiayaTersedia = 0;
 
                 if (arr_rpjm != null) {
-                    $.each(arr_rpjm, function (index, obj) {
-                        if (obj.id_rancangan_rpjm_desa == idRancanganRpjmDesa) {
-                            $("#inp_jenis_kegiatan").val(obj.jenis_kegiatan);
-                            $("#inp_lokasi").val(obj.lokasi_rt_rw);
-                            jumlahBiayaTersedia = obj.jumlah_biaya;
+                    $.each(arr_rpjm, function (index, objs) {
+                        if (objs.length > 0) {
+                            $.each(objs, function (index, obj) {
+                                if (obj.id_rancangan_rpjm_desa == idRancanganRpjmDesa) {
+                                    $("#inp_jenis_kegiatan").val(obj.jenis_kegiatan);
+                                    $("#inp_lokasi").val(obj.lokasi_rt_rw);
+                                    $("#inp_volume").val(obj.prakiraan_volume);
+                                    $("#inp_sasaran_manfaat").val(obj.sasaran_manfaat);
+                                    jumlahBiayaTersedia = obj.jumlah_biaya;
 //                            $("#inp_jumlah_biaya").val(toRp(obj.jumlah_biaya));
+                                }
+                            });
                         }
                     });
 

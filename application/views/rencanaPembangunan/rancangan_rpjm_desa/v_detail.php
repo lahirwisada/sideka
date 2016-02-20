@@ -104,10 +104,6 @@ echo $js_grid;
         document.getElementById("perencanaan").className = "collapsed active";
 
         document.getElementById("a-data-rancangan_rpjm_desa").className = "collapsed active";
-        document.getElementById("rancangan_rpjm_desa").className = "collapsed active";
-
-        var d = document.getElementById("nav-list_rancangan_rpjm_desa");
-        d.className = d.className + "active";
     }
 
 // very simple to use!
