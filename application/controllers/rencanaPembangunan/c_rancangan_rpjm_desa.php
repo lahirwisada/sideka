@@ -21,6 +21,7 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
         $this->load->model(array(
             'rencanaPembangunan/m_rancangan_rpjm_desa',
             'rencanaPembangunan/m_master_rancangan_rpjm_desa',
+            'rencanaPembangunan/m_sumber_dana_desa',
             'rencanaPembangunan/m_bidang'));
     }
 
@@ -260,14 +261,13 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
             $this->session->set_flashdata('attention_message', 'Maaf, Data tidak ditemukan.');
             redirect('rencanaPembangunan/c_rancangan_rpjm_desa', 'refresh');
         }
-        
-        $top_bidang = $this->m_bidang->getTopLevelBidang();
 
         $this->set('js_general_helper', $this->load->view('rencanaPembangunan/rancangan_rpjm_desa/js/general_helper', array(), TRUE));
         $this->set('deskripsi_title', 'Formulir Detail RPJM Desa');
         $this->set('attention_message', $attention_message);
+        $this->set('json_jenis_kegiatan', $this->select_jenis_kegiatan(TRUE));
+        $this->set('json_sumber_dana', $this->select_sumber_dana(TRUE));
         $this->set('id_m_rancangan_rpjm_desa', $id_m_rancangan_rpjm_desa);
-        $this->set('top_bidang', $top_bidang);
     }
 
     public function add($id_m_rancangan_rpjm_desa = FALSE) {

@@ -21,7 +21,10 @@ class C_baseRencanaPembangunan extends CI_Controller {
         $this->_name = strtolower($full_name);
 
         $this->load->helper('form');
-        $this->load->model('m_user');
+        $this->load->model(array('m_user',
+            'rencanaPembangunan/m_coa',
+            'rencanaPembangunan/m_sumber_dana_desa',
+        ));
         //$this->load->model('m_kalkulasi');     
         //$this->load->model('statistik/m_kk');	
         $this->_set_logo_and_menu($page_title, $menu);
@@ -34,7 +37,7 @@ class C_baseRencanaPembangunan extends CI_Controller {
         $this->set('konten_logo', $this->m_logo->getLogo());
 
         $this->set('page_title', $page_title);
-        
+
         $this->set('controller_name', $this->_name);
 
         $menu = 'menu/' . $menu;
@@ -135,6 +138,56 @@ class C_baseRencanaPembangunan extends CI_Controller {
 
     protected function set_header($type) {
         $this->output->set_content_type($type);
+    }
+
+    public function to_json($object_data = FALSE, $return = FALSE) {
+        $json_string = '{}';
+        if ($object_data) {
+            $json_string = json_encode($object_data);
+        }
+
+        if ($return) {
+            return $json_string;
+        }
+        $this->output->set_header($this->config->item('json_header'));
+        echo $json_string;
+        exit;
+    }
+
+    public function select_coa() {
+        $keyword = $this->input->post('keyword', TRUE);
+        $id_top_coa = $this->input->post('id_top_coa', TRUE);
+        $inp = $this->input->post('inp', TRUE);
+        $where_top_coa = 'id_top_coa = ' . $id_top_coa;
+        $rows = $this->m_coa->getCoaForInputSelect($keyword['term'], $where_top_coa);
+        if ($inp == 'select2') {
+            return $this->to_json(array("results" => $rows), FALSE);
+        }
+        return $this->to_json($rows, FALSE);
+    }
+
+    public function select_jenis_kegiatan($return = FALSE) {
+        $keyword = $this->input->post('keyword', TRUE);
+        $rows = $this->m_coa->getCoaForInputSelect($keyword);
+        return $this->to_json($rows, $return);
+    }
+
+    public function select_sumber_dana($return = FALSE) {
+        $keyword = $this->input->post('term', TRUE);
+        $rows = $this->m_sumber_dana_desa->getForInputSelect($keyword);
+        return $this->to_json($rows, $return);
+    }
+
+    public function autocomplete_jenis_kegiatan($return = FALSE) {
+        $deskripsi_bidang = $this->input->post('deskripsi_bidang', TRUE);
+
+        $rows = $this->m_coa->getCoaForInputSelect($deskripsi_bidang);
+        $json_array = array();
+        foreach ($rows as $row) {
+            $json_array[] = $row->text;
+        }
+
+        return $this->to_json($json_array, $return);
     }
 
 }

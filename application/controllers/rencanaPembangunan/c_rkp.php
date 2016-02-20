@@ -261,7 +261,7 @@ class C_rkp extends C_baseRencanaPembangunan {
         $this->load->model(array(
             'rencanaPembangunan/m_bidang'));
 
-        $bidang = $this->m_bidang->getTopLevelBidang();
+        $bidang = $this->m_coa->getDeskripsiBidangFromConfig();
 
         $master_rpjm_desa = $this->m_master_rancangan_rpjm_desa->getDetail($detail_master_rkp->id_m_rancangan_rpjm_desa);
         $and_tahun_pelaksanaan = FALSE;
