@@ -10,10 +10,12 @@ class M_rancangan_rpjm_desa extends CI_Model {
     private $_grouped = array();
     public $form_field_names = array(
         'id_bidang',
+        'id_sub_bidang',
         'id_coa',
+        'id_sumber_dana_desa',
         'id_m_rancangan_rpjm_desa',
-        'sub_bidang',
-        'jenis_kegiatan',
+//        'sub_bidang',
+//        'jenis_kegiatan',
         'lokasi_rt_rw',
         'prakiraan_volume',
         'sasaran_manfaat',
@@ -98,14 +100,20 @@ class M_rancangan_rpjm_desa extends CI_Model {
     public function getByIdMasterRpjm($id_m_rancangan_rpjm_desa = FALSE, $group_by_bidang = FALSE, $tahun_pelaksanaan = FALSE) {
         $this->_grouped = array();
         if ($id_m_rancangan_rpjm_desa) {
-            $this->_setSelectAndJoin();
 
 
             if ($group_by_bidang) {
-                $grouped = array_keys($this->array_total_bidang);
-                foreach ($grouped as $id_bidang) {
+
+                $this->load->model('rencanaPembangunan/m_coa');
+
+                $arr_id_bidang = $this->m_coa->getIdFromConfig();
+                $this->_setSelectAndJoin();
+                foreach ($arr_id_bidang as $id_bidang) {
                     $this->db->where($this->_table . '.id_bidang = ' . $id_bidang);
-                    $this->_grouped[$id_bidang] = $this->_getByIdMasterRpjm($id_m_rancangan_rpjm_desa, $tahun_pelaksanaan);
+                    if(!is_array($this->_grouped[$id_bidang])){
+                        $this->_grouped[$id_bidang] = array();
+                    }
+                    $this->_grouped[$id_bidang][] = $this->_getByIdMasterRpjm($id_m_rancangan_rpjm_desa, $tahun_pelaksanaan);
                 }
 
                 return $this->_grouped;
@@ -129,6 +137,16 @@ class M_rancangan_rpjm_desa extends CI_Model {
         foreach ($this->form_field_names as $key => $field_name) {
             if ($this->input->post($field_name)) {
                 $this->post_data[$field_name] = addslashes($this->input->post($field_name));
+            }
+        }
+
+        /* cek dan ambil id_coa untuk sub bidang dan bidang */
+        if (array_key_exists('id_coa', $this->post_data) && $this->post_data['id_coa']) {
+            $this->post_data['id_sub_bidang'] = $this->m_coa->getParentCoaByIdCoa($this->post_data['id_coa'], 3, TRUE);
+            if ($this->post_data['id_sub_bidang']) {
+                $this->post_data['id_bidang'] = $this->m_coa->getParentCoaByIdCoa($this->post_data['id_sub_bidang'], 2, TRUE);
+            }else{
+                return FALSE;
             }
         }
 
@@ -211,11 +229,10 @@ class M_rancangan_rpjm_desa extends CI_Model {
 
     public function _setSelectAndJoin() {
 
-
         $select = $this->_table . '.id_rancangan_rpjm_desa, ' .
-                'ref_rp_bidang.deskripsi as bidang, ' .
-                $this->_table . '.sub_bidang, ' .
-                $this->_table . '.jenis_kegiatan, ' .
+                'ref_rp_coa_a.deskripsi as bidang, ' .
+                'ref_rp_coa_b.deskripsi as sub_bidang, ' .
+                'ref_rp_coa_c.deskripsi as jenis_kegiatan, ' .
                 $this->_table . '.lokasi_rt_rw, ' .
                 $this->_table . '.prakiraan_volume, ' .
                 $this->_table . '.sasaran_manfaat, ' .
@@ -226,19 +243,31 @@ class M_rancangan_rpjm_desa extends CI_Model {
                 $this->_table . '.tahun_pelaksanaan_5, ' .
                 $this->_table . '.tahun_pelaksanaan_6, ' .
                 $this->_table . '.jumlah_biaya, ' .
-                $this->_table . '.sumber_dana, ' .
                 $this->_table . '.swakelola, ' .
                 $this->_table . '.kerjasama_antar_desa, ' .
                 $this->_table . '.kerjasama_pihak_ketiga, ' .
                 $this->_table . '.id_bidang, ' .
+                $this->_table . '.id_coa, ' .
+                'ref_rp_sumber_dana_desa.id_sumber_dana_desa, ' .
+                'ref_rp_sumber_dana_desa.deskripsi as sumber_biaya, ' .
                 'tbl_rp_m_rancangan_rpjm_desa.id_m_rancangan_rpjm_desa, ' .
                 'tbl_rp_m_rancangan_rpjm_desa.tahun_awal, ' .
                 'tbl_rp_m_rancangan_rpjm_desa.tahun_akhir, ' .
                 'tbl_rp_m_rancangan_rpjm_desa.tahun_anggaran ';
 
         $this->db->select($select);
-        $this->db->join('ref_rp_bidang', 'ref_rp_bidang.id_bidang = ' . $this->_table . '.id_bidang');
+        $this->setJoin();
+    }
+
+    public function setJoin() {
+        /* ambil bidang */
+        $this->db->join('ref_rp_coa ref_rp_coa_a', 'ref_rp_coa_a.id_coa = ' . $this->_table . '.id_bidang');
+        /* ambil sub bidang */
+        $this->db->join('ref_rp_coa ref_rp_coa_b', 'ref_rp_coa_b.id_coa = ' . $this->_table . '.id_sub_bidang');
+        /* ambil jenis kegiatan */
+        $this->db->join('ref_rp_coa ref_rp_coa_c', 'ref_rp_coa_c.id_coa = ' . $this->_table . '.id_coa');
         $this->db->join('tbl_rp_m_rancangan_rpjm_desa', 'tbl_rp_m_rancangan_rpjm_desa.id_m_rancangan_rpjm_desa = ' . $this->_table . '.id_m_rancangan_rpjm_desa');
+        $this->db->join('ref_rp_sumber_dana_desa', 'ref_rp_sumber_dana_desa.id_sumber_dana_desa = ' . $this->_table . '.id_sumber_dana_desa');
     }
 
     public function getFlexigrid($master_id) {
@@ -252,11 +281,13 @@ class M_rancangan_rpjm_desa extends CI_Model {
 
         //Get contents
         $return['records'] = $this->db->get();
+//        echo $this->db->last_query();exit;
 
         //Build count query
         $this->db->select("count(" . $this->_table . ".id_rancangan_rpjm_desa) as record_count")->from($this->_table);
         $this->db->where($this->_table . '.id_m_rancangan_rpjm_desa', $master_id);
-        $this->db->join('ref_rp_bidang', 'ref_rp_bidang.id_bidang = ' . $this->_table . '.id_bidang', 'left');
+        $this->setJoin();
+//        $this->db->join('ref_rp_bidang', 'ref_rp_bidang.id_bidang = ' . $this->_table . '.id_bidang', 'left');
         $this->ci->flexigrid->build_query(FALSE);
         $record_count = $this->db->get();
         $row = $record_count->row();

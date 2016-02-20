@@ -7,6 +7,7 @@ class M_master_rkp extends CI_Model {
 
     private $ci;
     private $_table = 'tbl_rp_m_rkp';
+    public $_primary_key = 'id_m_rkp';
     public $form_field_names = array(
         'id_m_rancangan_rpjm_desa',
         'rkp_tahun',
@@ -20,7 +21,7 @@ class M_master_rkp extends CI_Model {
     function __construct() {
         parent::__construct();
         $this->ci = get_instance();
-        
+
         $this->ci->config->load('rp_rancangan_rpjm_desa');
         $this->array_total_bidang = $this->ci->config->item('array_total_bidang');
     }
@@ -79,21 +80,23 @@ class M_master_rkp extends CI_Model {
 
     public function setSubTotal($id_m_rkp = FALSE, $id_bidang = FALSE, $sub_total = NULL) {
         if ($id_m_rkp) {
-            
 
             $detail = $this->getDetail($id_m_rkp);
-            
-            
             $selected_field_name = NULL;
             if ($id_bidang) {
+                $this->load->model('rencanaPembangunan/m_coa');
+                $arr_id_bidang = $this->m_coa->getIdFromConfig();
+
+                $this->array_total_bidang = array_combine($arr_id_bidang, array_values($this->array_total_bidang));
+                unset($arr_id_bidang);
+
                 $data = array(
                     $this->array_total_bidang[$id_bidang] => $sub_total
                 );
-                
-                
+
+
 
                 $selected_field_name = $this->array_total_bidang[$id_bidang];
-                
             }
 
             if ($detail) {
@@ -217,14 +220,18 @@ class M_master_rkp extends CI_Model {
         $this->db->join('ref_provinsi', 'ref_provinsi.id_provinsi = tbl_rp_m_rancangan_rpjm_desa.id_provinsi');
     }
 
-    function getArray($from_year = FALSE) {
+    function getArray($from_year = FALSE, $to_year = FALSE, $default_value = FALSE) {
         if (!$from_year) {
             $from_year = date('Y');
+        }
+        if (!$to_year) {
+            $to_year = $from_year + 7;
         }
 
         $this->_setSelectAndJoin();
 
-        $this->db->where($this->_table . '.tahun_awal >= ' . $from_year);
+        $this->db->where($this->_table . '.rkp_tahun >= ' . $from_year);
+        $this->db->where($this->_table . '.rkp_tahun <= ' . $to_year);
 
         $q = $this->db->get($this->_table);
         $rs = FALSE;
@@ -232,11 +239,11 @@ class M_master_rkp extends CI_Model {
             $rs = $q->result_array();
         }
 
-        $arr_result = FALSE;
+        $arr_result = $default_value;
         if ($rs) {
             $arr_result = array();
             foreach ($rs as $record) {
-                $arr_result[$record["id_m_rancangan_rpjm_desa"]] = $record;
+                $arr_result[$record[$this->_primary_key]] = $record;
             }
         }
         return $arr_result;
@@ -256,7 +263,7 @@ class M_master_rkp extends CI_Model {
         $return['records'] = $this->db->get();
 
         //Build count query
-        $this->db->select("count(" . $this->_table . ".id_m_rkp) as record_count")->from($this->_table);
+        $this->db->select("count(" . $this->_table . "." . $this->_primary_key . ") as record_count")->from($this->_table);
         $this->_join();
         $this->ci->flexigrid->build_query(FALSE);
         $record_count = $this->db->get();

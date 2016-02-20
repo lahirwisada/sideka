@@ -87,6 +87,13 @@ class M_master_rancangan_rpjm_desa extends CI_Model {
             $detail = $this->getDetail($id_m_rancangan_rpjm_desa);
             $selected_field_name = NULL;
             if ($id_bidang) {
+                
+                $this->load->model('rencanaPembangunan/m_coa');
+                $arr_id_bidang = $this->m_coa->getIdFromConfig();
+                
+                $this->array_total_bidang = array_combine($arr_id_bidang, array_values($this->array_total_bidang));
+                unset($arr_id_bidang);
+                
                 $data = array(
                     $this->array_total_bidang[$id_bidang] => $sub_total
                 );

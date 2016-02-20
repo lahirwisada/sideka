@@ -208,7 +208,7 @@ class M_rkp extends CI_Model {
                 $this->_table . '.id_rancangan_rpjm_desa, ' .
                 $this->_table . '.id_bidang, ' .
                 'tbl_rp_m_rkp.rkp_tahun, ' .
-                'ref_rp_bidang.deskripsi as bidang, ' .
+                'ref_rp_coa.deskripsi as bidang, ' .
                 $this->_table . '.jenis_kegiatan, ' .
                 $this->_table . '.lokasi, ' .
                 $this->_table . '.volume, ' .
@@ -222,7 +222,7 @@ class M_rkp extends CI_Model {
 
         $this->db->select($select);
         $this->db->join('tbl_rp_m_rkp', 'tbl_rp_m_rkp.id_m_rkp = ' . $this->_table . '.id_m_rkp');
-        $this->db->join('ref_rp_bidang', 'ref_rp_bidang.id_bidang = ' . $this->_table . '.id_bidang');
+        $this->db->join('ref_rp_coa', 'ref_rp_coa.id_coa = ' . $this->_table . '.id_bidang');
     }
 
     public function insert_data($data = FALSE) {

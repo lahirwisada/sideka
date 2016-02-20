@@ -1,6 +1,8 @@
 <?php
 
 class M_bidang extends CI_Model {
+    
+    private $_table = 'ref_rp_bidang';
 
     function __construct() {
         parent::__construct();
@@ -197,12 +199,20 @@ class M_bidang extends CI_Model {
         $data = array_shift($q->result_array());
         return ($data['id_bidang']);
     }
-    
-    function getTopLevelBidang(){
+
+    function getTopLevelBidang() {
         $this->db->select('id_bidang, deskripsi');
         $this->db->where('level', 1);
         $q = $this->db->get('ref_rp_bidang');
         return $q->result_array();
+    }
+
+    function get_Bidang($keyword) {
+        $where = "level >= 3 and (deskripsi LIKE '%".addslashes($keyword)."%' or kode_bidang LIKE '%".addslashes($keyword)."%') ";
+
+        $this->db->where($where);
+        $query = $this->db->get($this->_table);
+        return $query->result();
     }
 
 }
