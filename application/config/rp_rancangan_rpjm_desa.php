@@ -82,7 +82,7 @@ $config['rp_master_rancangan_rpjm_desa'] = array(
 //        array('separator'),
         array('Tambah', 'add', 'btn'),
         array('separator'),
-        array('Import Excel', 'add', 'btn'),
+//        array('Import Excel', 'add', 'btn'),
 //        array('separator'),
 //        array('Delete Selected Items', 'delete', 'btn'),
 //        array('separator')
