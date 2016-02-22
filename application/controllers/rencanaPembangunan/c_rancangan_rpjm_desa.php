@@ -302,7 +302,7 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
             
             
 
-            $this->excel->stream('rpjmku.xls');
+            $this->excel->stream('rpjm_tahun_anggaran_'.  str_replace(' ', '', $detail_master_rpjm->tahun_anggaran).'.xls');
         }
 
         exit;
