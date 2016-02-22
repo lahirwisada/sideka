@@ -6,7 +6,7 @@ class Excel {
 
     public function __construct() {
         // initialise the reference to the codeigniter instance
-        require_once APPPATH.'third_party/phpexcel/PHPExcel.php';
+        require_once APPPATH.'libraries/PHPExcel/PHPExcel.php';
         $this->excel = new PHPExcel();    
     }
 
