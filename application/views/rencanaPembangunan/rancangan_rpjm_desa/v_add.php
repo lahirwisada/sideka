@@ -200,7 +200,7 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
             }
             
             $("#slc_tahun_anggaran_akhir").append(optTahunAkhir);
-            $("#slc_tahun_anggaran_akhir").val(parseInt(self_val)+6);
+            $("#slc_tahun_anggaran_akhir").val(parseInt(self_val)+5);
             $("#slc_tahun_anggaran_awal").append(optTahunAkhir);
             $("#slc_tahun_anggaran_awal").val(self_val);
         });
