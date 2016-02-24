@@ -209,6 +209,7 @@ class M_rkp extends CI_Model {
                 $this->_table . '.id_bidang, ' .
                 'tbl_rp_m_rkp.rkp_tahun, ' .
                 'ref_rp_coa.deskripsi as bidang, ' .
+                'tbl_rp_rancangan_rpjm_desa.sumber_dana, ' .
                 $this->_table . '.jenis_kegiatan, ' .
                 $this->_table . '.lokasi, ' .
                 $this->_table . '.volume, ' .
@@ -218,9 +219,13 @@ class M_rkp extends CI_Model {
                 $this->_table . '.rencana_pelaksanaan_kegiatan, ' .
                 $this->_table . '.swakelola, ' .
                 $this->_table . '.kerjasama_antar_desa, ' .
-                $this->_table . '.kerjasama_pihak_ketiga ';
+                $this->_table . '.kerjasama_pihak_ketiga, ' .
+                'tbl_rp_m_rkp.disusun_oleh, ' .
+                'tbl_rp_m_rkp.tanggal_disusun, ' .
+                'tbl_rp_m_rkp.kepala_desa ';
 
         $this->db->select($select);
+        $this->db->join('tbl_rp_rancangan_rpjm_desa', 'tbl_rp_rancangan_rpjm_desa.id_rancangan_rpjm_desa = ' . $this->_table . '.id_rancangan_rpjm_desa');
         $this->db->join('tbl_rp_m_rkp', 'tbl_rp_m_rkp.id_m_rkp = ' . $this->_table . '.id_m_rkp');
         $this->db->join('ref_rp_coa', 'ref_rp_coa.id_coa = ' . $this->_table . '.id_bidang');
     }
@@ -229,6 +234,50 @@ class M_rkp extends CI_Model {
         if ($data) {
             $this->db->insert($this->_table, $data);
         }
+    }
+    
+    private function _getByIdMasterRkp($id_m_rkp = FALSE, $tahun_pelaksanaan = FALSE) {
+        if ($tahun_pelaksanaan) {
+            $this->db->where($tahun_pelaksanaan);
+        }
+
+        $this->db->where($this->_table . '.id_m_rkp = ' . $id_m_rkp);
+
+        $q = $this->db->get($this->_table);
+        $rs = FALSE;
+        if ($q) {
+            $rs = $q->result();
+        }
+
+        return $rs;
+    }
+
+    public function getByIdMasterRkp($id_m_rkp = FALSE, $group_by_bidang = FALSE, $tahun_pelaksanaan = FALSE) {
+        $this->_grouped = array();
+        if ($id_m_rkp) {
+
+
+            if ($group_by_bidang) {
+
+                $this->load->model('rencanaPembangunan/m_coa');
+
+                $arr_id_bidang = $this->m_coa->getIdFromConfig();
+                
+                $this->_setSelectAndJoin();
+                foreach ($arr_id_bidang as $id_bidang) {
+                    $this->db->where($this->_table . '.id_bidang = ' . $id_bidang);
+                    if(!is_array($this->_grouped[$id_bidang])){
+                        $this->_grouped[$id_bidang] = array();
+                    }
+                    $this->_grouped[$id_bidang][] = $this->_getByIdMasterRkp($id_m_rkp, $tahun_pelaksanaan);
+                }
+
+                return $this->_grouped;
+            }
+
+            return $this->_getByIdMasterRkp($id_m_rkp, $tahun_pelaksanaan);
+        }
+        return FALSE;
     }
 
 }
