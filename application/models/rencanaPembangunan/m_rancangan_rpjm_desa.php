@@ -230,6 +230,7 @@ class M_rancangan_rpjm_desa extends CI_Model {
     public function _setSelectAndJoin() {
 
         $select = $this->_table . '.id_rancangan_rpjm_desa, ' .
+                'ref_rp_coa_a.kode_rekening, ' .
                 'ref_rp_coa_a.deskripsi as bidang, ' .
                 'ref_rp_coa_b.deskripsi as sub_bidang, ' .
                 'ref_rp_coa_c.deskripsi as jenis_kegiatan, ' .
@@ -256,6 +257,7 @@ class M_rancangan_rpjm_desa extends CI_Model {
                 'tbl_rp_m_rancangan_rpjm_desa.tahun_anggaran ';
 
         $this->db->select($select);
+        $this->db->order_by("ref_rp_coa.kode_rekening", "asc");
         $this->setJoin();
     }
 
