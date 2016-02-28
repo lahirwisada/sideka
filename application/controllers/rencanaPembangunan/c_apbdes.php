@@ -67,6 +67,7 @@ class C_apbdes extends C_baseRencanaPembangunan {
 
         $attention_message = $this->session->flashdata('attention_message');
         $this->set('attention_message', $attention_message);
+        $this->set('id_m_apbdes', $id);
         $this->set('js_grid', $grid_js);
         $this->set('deskripsi_title', 'Detail RKP');
     }
