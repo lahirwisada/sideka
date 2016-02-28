@@ -82,6 +82,8 @@
                              */
                             ?>
 
+                            <?php
+                            /**
                             <li class="dropdownmenu">
                                 <a id="a-data-rpjmd" class="collapsed" data-toggle="collapse" href="#rpjmd" title="Rencana Pembangunan Jangka Menengah Daerah">
                                     <i class="fa fa-newspaper-o fa-fw"></i> RPJMD<span class="fa arrow"></span></a>
@@ -131,6 +133,9 @@
                                     </ul>
                                 </div>
                             </li>
+                             * 
+                             */
+                            ?>
                         </ul>
                     </div>
                 </li>
