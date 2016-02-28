@@ -2,7 +2,7 @@
 $attention_message = isset($attention_message) && $attention_message ? $attention_message : FALSE;
 $controller_name = isset($controller_name) ? $controller_name : 'c_rkp';
 $arr_provinsi = isset($arr_provinsi) ? $arr_provinsi : FALSE;
-$post_data = isset($post_data) ? $post_data : FALSE;
+$post_data = isset($post_data) && !empty($post_data) && $post_data ? $post_data : FALSE;
 
 
 $master_rkp = isset($master_rkp) ? $master_rkp : FALSE;
@@ -11,7 +11,7 @@ $top_level_coa = isset($top_level_coa) ? $top_level_coa : FALSE;
 
 $id_m_apbdes = isset($id_m_apbdes) ? $id_m_apbdes : '';
 $id_apbdes = isset($id_apbdes) ? $id_apbdes : FALSE;
-$form_url = 'rencanaPembangunan/'.$controller_name.'/add_detail/' . $id_m_apbdes.($id_apbdes ? '/'.$id_apbdes : '');
+$form_url = 'rencanaPembangunan/' . $controller_name . '/add_detail/' . $id_m_apbdes . ($id_apbdes ? '/' . $id_apbdes : '');
 ?>
 <link href="<?php echo base_url(); ?>assetku/js/plugins/select2/css/select2.min.css" rel="stylesheet">
 <h3><?= $page_title ?></h3>
@@ -31,7 +31,7 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
         <select  class="form-control input-md required" id="slc_group_coa" name="id_top_coa"  aria-describedby="hlpBlock3">
             <?php if ($top_level_coa): ?>
                 <?php foreach ($top_level_coa as $key => $record_top_level_coa): ?>
-                    <option value="<?php echo $record_top_level_coa->id_coa; ?>"><?php echo $record_top_level_coa->deskripsi; ?></option>
+                    <option value="<?php echo $record_top_level_coa->id_coa; ?>" <?php echo $post_data && $post_data["id_top_coa"] == $record_top_level_coa->id_coa ? "selected=\"selected\"" : ""; ?>><?php echo $record_top_level_coa->deskripsi; ?></option>
                 <?php endforeach; ?>
             <?php else: ?>
                 <option value="">-- Tidak ada COA ditemukan --</option>
@@ -76,7 +76,7 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
 <div class="form-group">
     <label class="col-md-3 control-label" for="keterangan"> Keterangan</label> 
     <div class="col-md-9">
-        <textarea class="form-control input-md" name="keterangan" id="keterangan"><?php echo $post_data ? $post_data["anggaran"] : ''; ?></textarea>
+        <textarea class="form-control input-md" name="keterangan" id="keterangan"><?php echo $post_data ? $post_data["keterangan"] : ''; ?></textarea>
         <span id="hlpBlock8" class="help-block">
             <div id="dvAlertketerangan" class="dvAlert"></div>
         </span>
@@ -85,7 +85,7 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
 <p>
 <legend></legend>
 <input type="submit" value="Simpan" class="btn btn-success" id="simpan"/>
-<input type="button" value="Batal" class="btn btn-danger" id="batal" onclick="location.href = '<?php echo base_url(); ?>rencanaPembangunan/c_rkp'" />
+<input type="button" value="Batal" class="btn btn-danger" id="batal" onclick="location.href = '<?php echo base_url(); ?>rencanaPembangunan/c_apbdes'" />
 </p>
 
 <?php echo form_close(); ?>
@@ -121,9 +121,9 @@ echo isset($js_general_helper) ? $js_general_helper : '';
             ResetValidationMessage();
 
             var validasi_a = ValidateInput("slc_group_coa", "dvAlertslc_group_coa", "Grup COA harus diisi"),
-            validasi_b = ValidateInput("slc_id_coa", "dvAlertslc_id_coa", "Kode Rekening harus diisi"),
-            validasi_c = ValidateInput("inp_anggaran", "dvAlertanggaran", "Anggaran harus diisi"),
-            formvalid = validasi_a && validasi_b && validasi_c;
+                    validasi_b = ValidateInput("slc_id_coa", "dvAlertslc_id_coa", "Kode Rekening harus diisi"),
+                    validasi_c = ValidateInput("inp_anggaran", "dvAlertanggaran", "Anggaran harus diisi"),
+                    formvalid = validasi_a && validasi_b && validasi_c;
 
             if (formvalid) {
                 if (confirm("Mohon tetap di halaman ini ketika proses sedang berjalan.\nProses Akan berhenti ketika anda berpindah halaman.Hendaknya memeriksa kembali sebelum melakukan simpan data.\n\nAnda yakin akan melanjutkan ? ")) {
@@ -164,5 +164,34 @@ echo isset($js_general_helper) ? $js_general_helper : '';
                 return data;
             }
         });
+
+<?php if ($post_data): ?>
+            
+            var $option = $('<option selected>Baca Data...</option>').val("");
+            
+            $("#slc_id_coa").append($option).trigger('change');
+
+            $.ajax({// make the request for the selected data object
+                type: 'POST',
+                url: '<?php echo base_url() . 'rencanaPembangunan/c_baseRencanaPembangunan/select_coa'; ?>',
+                dataType: 'json',
+                data: {
+                    keyword: '<?php echo $post_data["kode_rekening"]; ?>',
+                    id_top_coa: $("#slc_group_coa").val(),
+                    inp: 'select2',
+                    initEdit: <?php echo $post_data["id_coa"]; ?>,
+                }
+            }).then(function (data) {
+                
+                if(typeof data.results !== 'undefined' && data.results.length > 0){
+                    $option.text(data.results[0].text).val(data.results[0].id);
+                    $option.removeData();
+                    $("#slc_id_coa").trigger('change');
+                }
+            });
+
+<?php endif; ?>
+
+    
     });
 </script>

@@ -2,7 +2,7 @@
 $attention_message = isset($attention_message) && $attention_message ? $attention_message : FALSE;
 $controller_name = isset($controller_name) ? $controller_name : 'c_rkp';
 $arr_provinsi = isset($arr_provinsi) ? $arr_provinsi : FALSE;
-$post_data = isset($post_data) ? $post_data : FALSE;
+$post_data = isset($post_data) && !empty($post_data) && $post_data ? $post_data : FALSE;
 
 
 $master_rkp = isset($master_rkp) ? $master_rkp : FALSE;
@@ -10,7 +10,7 @@ $top_level_coa = isset($top_level_coa) ? $top_level_coa : FALSE;
 
 
 $id_m_rancangan_rpjm_desa = isset($id_m_rancangan_rpjm_desa) ? $id_m_rancangan_rpjm_desa : '';
-$form_url = 'rencanaPembangunan/'.$controller_name.'/add/' . $id_m_rancangan_rpjm_desa;
+$form_url = 'rencanaPembangunan/'.$controller_name.'/add/' . ($post_data ? $post_data["id_m_apbdes"] : '');
 ?>
 
 <h3><?= $page_title ?></h3>
@@ -30,7 +30,7 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
         <select  class="form-control input-md required" id="slc_rkp" name="id_m_rkp"  aria-describedby="hlpBlock3">
             <?php if ($master_rkp): ?>
                 <?php foreach ($master_rkp as $id_m_master_rkp => $record_master_rkp): ?>
-                    <option value="<?php echo $id_m_master_rkp; ?>"><?php echo 'TA. ' . $record_master_rkp['rkp_tahun']; ?></option>
+                    <option value="<?php echo $id_m_master_rkp; ?>" <?php echo $post_data && $id_m_master_rkp == $post_data["id_m_master_rkp"] ? "selected=\"selected\"" : ""; ?>><?php echo 'TA. ' . $record_master_rkp['rkp_tahun']; ?></option>
                 <?php endforeach; ?>
             <?php else: ?>
                 <option value="">-- Tidak ada RKP ditemukan --</option>
@@ -72,7 +72,7 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
 <p>
 <legend></legend>
 <input type="submit" value="Simpan" class="btn btn-success" id="simpan"/>
-<input type="button" value="Batal" class="btn btn-danger" id="batal" onclick="location.href = '<?php echo base_url(); ?>rencanaPembangunan/c_rkp'" />
+<input type="button" value="Batal" class="btn btn-danger" id="batal" onclick="location.href = '<?php echo base_url(); ?>rencanaPembangunan/c_apbdes'" />
 </p>
 
 <?php echo form_close(); ?>
