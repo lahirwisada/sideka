@@ -67,6 +67,7 @@ class C_rkp extends C_baseRencanaPembangunan {
         $grid_js = build_grid_js('flex1', site_url('rencanaPembangunan/c_rkp/load_data_detail/'.$id), $colModelM, 'id_rkp', 'desc', $gridParams, $buttons);
 
         $attention_message = $this->session->flashdata('attention_message');
+        $this->set('id_m_rkp', $id);
         $this->set('attention_message', $attention_message);
         $this->set('js_grid', $grid_js);
         $this->set('deskripsi_title', 'Detail RKP');
@@ -100,7 +101,8 @@ class C_rkp extends C_baseRencanaPembangunan {
                     ($row->swakelola != 0 ? '<i class="fa fa-check"></i>' : ' '),
                     ($row->kerjasama_antar_desa != 0 ? '<i class="fa fa-check"></i>' : ' '),
                     ($row->kerjasama_pihak_ketiga != 0 ? '<i class="fa fa-check"></i>' : ' '),
-                    $row->rencana_pelaksanaan_kegiatan
+                    $row->rencana_pelaksanaan_kegiatan,
+                    '<a  title="Ubah Data" href="' . base_url() . 'rencanaPembangunan/c_rkp/add_detail/' . $id_m_rkp . '/'.$row->id_rkp.'" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></a>'
                 );
             }
         }
@@ -153,6 +155,7 @@ class C_rkp extends C_baseRencanaPembangunan {
                 /**
                  * @todo Buat generate excel untuk rkp
                  */
+                '<a  title="Ubah Data" href="' . base_url() . 'rencanaPembangunan/c_rkp/add/' . $row->id_m_rkp . '" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></a>&nbsp;' .
                 '<a  title="Download Excel" href="' . base_url() . 'rencanaPembangunan/c_rkp/export_excel/' . $row->id_m_rkp . '" class="btn btn-success btn-xs"><i class="fa fa-file-excel-o"></i></a>'
             );
         }
@@ -166,6 +169,7 @@ class C_rkp extends C_baseRencanaPembangunan {
         $post_data = array();
         $attention_message = "";
         if (count($_POST) > 0) {
+            
             $this->m_master_rkp->getPostData();
             $response = $this->m_master_rkp->save($id_m_rkp);
             $attention_message = $response["message_error"];
@@ -192,6 +196,7 @@ class C_rkp extends C_baseRencanaPembangunan {
         $this->set('attention_message', $attention_message);
         $this->set('id_m_rkp', $id_m_rkp);
 
+//        var_dump($post_data);exit;
 
         $this->set('js_general_helper', $this->load->view('rencanaPembangunan/rancangan_rpjm_desa/js/general_helper', array(), TRUE));
         $this->set('master_rpjm', $master_rpjm);
@@ -282,6 +287,7 @@ class C_rkp extends C_baseRencanaPembangunan {
         $this->set('attention_message', $attention_message);
         $this->set('id_m_rkp', $id_m_rkp);
 
+        $this->set('post_data', $post_data);
         $this->set('bidang', $bidang);
         $this->set('deskripsi_title', 'Detail RKP Desa');
 
