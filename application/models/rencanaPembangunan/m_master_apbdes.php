@@ -103,6 +103,8 @@ class M_master_apbdes extends CI_Model {
 
             $id = $id;
             if ($id) {
+                
+//                var_dump($this->post_data);exit;
                 $response["error_message"] = "Perubahan ";
                 $response["error_number"] = "1.2";
 

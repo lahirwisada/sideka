@@ -284,7 +284,7 @@ class M_coa extends CI_Model {
         return $arr_key;
     }
 
-    function getCoaForInputSelect($keyword = '', $additional_where = FALSE) {
+    function getCoaForInputSelect($keyword = '', $additional_where = FALSE, $where_id_coa = FALSE) {
 
         $select = $this->_table . ".id_coa as id, " .
                 "CONCAT(" . $this->_table . ".kode_rekening, ' - ', " . $this->_table . ".deskripsi) as text";
@@ -294,6 +294,10 @@ class M_coa extends CI_Model {
 
         if($additional_where){
             $this->db->where($additional_where);
+        }
+        
+        if($where_id_coa){
+            $where = 'id_coa = '.$where_id_coa;
         }
         
         $this->db->where($where);
