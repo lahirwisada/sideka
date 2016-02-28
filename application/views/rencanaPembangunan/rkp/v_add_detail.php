@@ -2,14 +2,13 @@
 $attention_message = isset($attention_message) && $attention_message ? $attention_message : FALSE;
 $controller_name = isset($controller_name) ? $controller_name : 'c_rkp';
 $arr_provinsi = isset($arr_provinsi) ? $arr_provinsi : FALSE;
-$post_data = isset($post_data) ? $post_data : FALSE;
-
+$post_data = isset($post_data) && !empty($post_data) && $post_data ? $post_data : FALSE;
 
 $master_rpjm = isset($master_rpjm) ? $master_rpjm : FALSE;
 $bidang = isset($bidang) ? $bidang : FALSE;
 
 $id_m_rkp = isset($id_m_rkp) ? $id_m_rkp : '';
-$form_url = 'rencanaPembangunan/' . $controller_name . '/add_detail/' . $id_m_rkp;
+$form_url = 'rencanaPembangunan/' . $controller_name . '/add_detail/' . $id_m_rkp . (!empty($post_data) && $post_data ? '/' . $post_data["id_rkp"] : '');
 ?>
 
 <h3><?= $page_title ?></h3>
@@ -30,7 +29,7 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
             <option value="">-- Pilih Bidang --</option>
             <?php if ($bidang): ?>
                 <?php foreach ($bidang as $key => $deskripsi): ?>
-                    <option value="<?php echo $key; ?>"><?php echo ucwords(strtolower($deskripsi)); ?></option>
+                    <option value="<?php echo $key; ?>" <?php echo $post_data && $key == $post_data["id_bidang"] ? "selected=\"selected\"" : ""; ?>><?php echo ucwords(strtolower($deskripsi)); ?></option>
                 <?php endforeach; ?>
             <?php else: ?>
                 <option value=""></option>
@@ -120,7 +119,7 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
 <div class="form-group">
     <label class="col-md-5 control-label" for="tanggal_disusun"> Rencana Pelaksanaan Kegiatan</label> 
     <div class="col-md-9">
-        <input class="form-control input-md required" type="text" name="rencana_pelaksanaan_kegiatan" id="inp_rencana_pelaksanaan_kegiatan" size="80" value="<?php echo $post_data ? $post_data["jumlah_biaya"] : ''; ?>" aria-describedby="hlpBlock9" /> 
+        <input class="form-control input-md required" type="text" name="rencana_pelaksanaan_kegiatan" id="inp_rencana_pelaksanaan_kegiatan" size="80" value="<?php echo $post_data ? $post_data["rencana_pelaksanaan_kegiatan"] : ''; ?>" aria-describedby="hlpBlock9" /> 
 
         <span id="hlpBlock9" class="help-block">
             <div id="dvAlertinp_rencana_pelaksanaan_kegiatan" class="dvAlert"></div>
@@ -211,8 +210,6 @@ echo isset($js_rkp_add_detail) ? $js_rkp_add_detail : '';
 
                 ResetInputSelect($("#slc_id_rancangan_rpjm_desa"));
 
-                console.log(val, arr_rpjm, rpjm);
-
                 if (arr_rpjm != null) {
                     var opt = '';
                     $.each(arr_rpjm, function (index, options) {
@@ -276,5 +273,30 @@ echo isset($js_rkp_add_detail) ? $js_rkp_add_detail : '';
                 }
             }
         });
+
+
+<?php if (!empty($post_data) && $post_data): ?>
+
+$("#slc_bidang").change();
+
+$("#slc_id_rancangan_rpjm_desa").val(<?php echo $post_data["id_rancangan_rpjm_desa"]; ?>);
+
+$("#slc_id_rancangan_rpjm_desa").change();
+
+    <?php
+    foreach (array(
+"swakelola",
+ "kerjasama_antar_desa",
+ "kerjasama_pihak_ketiga",
+    ) as $inp_check) {
+        if (!is_null($post_data[$inp_check]) && $post_data[$inp_check] != FALSE):
+            echo "setCheck('" . $inp_check . "');";
+        else:
+            echo "remCheck('" . $inp_check . "');";
+        endif;
+    }
+    ?>
+
+<?php endif; ?>
     });
 </script>

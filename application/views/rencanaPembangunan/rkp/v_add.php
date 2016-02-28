@@ -9,7 +9,7 @@ $master_rpjm = isset($master_rpjm) ? $master_rpjm : FALSE;
 
 
 $id_m_rancangan_rpjm_desa = isset($id_m_rancangan_rpjm_desa) ? $id_m_rancangan_rpjm_desa : '';
-$form_url = 'rencanaPembangunan/c_rkp/add/' . $id_m_rancangan_rpjm_desa;
+$form_url = 'rencanaPembangunan/c_rkp/add/' . (!empty($post_data) && $post_data ? $post_data["id_m_rkp"] : '');
 ?>
 
 <h3><?= $page_title ?></h3>
@@ -28,7 +28,7 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
         <?php if ($master_rpjm): ?>
             <select  class="form-control input-md required" id="slc_rpjm" name="id_m_rancangan_rpjm_desa"  aria-describedby="hlpBlock3">
                 <?php foreach ($master_rpjm as $id_m_rancangan_rpjm_desa => $record_master_rpjm): ?>
-                    <option value="<?php echo $id_m_rancangan_rpjm_desa; ?>"><?php echo 'TA. ' . $record_master_rpjm['tahun_anggaran'] . ' - ' . $record_master_rpjm['nama_desa'] . ', ' . $record_master_rpjm['nama_desa'] . ', ' . $record_master_rpjm['nama_kab_kota']; ?></option>
+                    <option value="<?php echo $id_m_rancangan_rpjm_desa; ?>" <?php echo!empty($post_data) && $post_data && $id_m_rancangan_rpjm_desa == $post_data["id_m_rancangan_rpjm_desa"] ? "selected=\"selected\"" : ""; ?>><?php echo 'TA. ' . $record_master_rpjm['tahun_anggaran'] . ' - ' . $record_master_rpjm['nama_desa'] . ', ' . $record_master_rpjm['nama_desa'] . ', ' . $record_master_rpjm['nama_kab_kota']; ?></option>
                 <?php endforeach; ?>
             </select>
         <?php endif; ?>
@@ -143,7 +143,7 @@ echo isset($js_general_helper) ? $js_general_helper : '';
                 $.each(rpjm_th, function (i, v) {
                     if (v.id_rpjm == val) {
                         var opt = '';
-                        for(i = v.tahun_awal; i <= v.tahun_akhir; i++){
+                        for (i = v.tahun_awal; i <= v.tahun_akhir; i++) {
                             opt += '<option value=\'' + i + '\'>' + i + '</option>';
                         }
                         $("#slc_rkp_tahun").append(opt);
@@ -152,8 +152,12 @@ echo isset($js_general_helper) ? $js_general_helper : '';
             }
 
         });
-        
+
         $("#slc_rpjm").change();
+
+<?php if (!empty($post_data) && $post_data): ?>
+        $("#slc_rkp_tahun").val(<?php echo $post_data["rkp_tahun"]; ?>);
+<?php endif; ?>
 
         $("#slc_provinsi").change(function () {
             var val = $(this).val();

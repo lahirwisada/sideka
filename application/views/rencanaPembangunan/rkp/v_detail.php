@@ -4,6 +4,7 @@
  */
 $attention_message = isset($attention_message) && $attention_message ? $attention_message : FALSE;
 $controller_name = isset($controller_name) ? $controller_name : 'c_rkp';
+$id_m_rkp = isset($id_m_rkp) ? $id_m_rkp : '';
 ?>
 <link href="<?php echo $this->config->item('base_url'); ?>css/flexigrid.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?= $this->config->item('base_url'); ?>js/jquery.pack.js"></script>
@@ -54,9 +55,9 @@ echo $js_grid;
             window.location = _base_url + 'rencanaPembangunan/<?php echo $controller_name; ?>/import_excel';
         }
 
-        if (com == 'Tambah')
+        if (com == 'Tambah Detail')
         {
-            window.location = _base_url + 'rencanaPembangunan/<?php echo $controller_name; ?>/add';
+            window.location = _base_url + 'rencanaPembangunan/<?php echo $controller_name; ?>/add_detail/<?php echo $id_m_rkp; ?>';
         }
 
 //        if (com == 'Delete Selected Items')
