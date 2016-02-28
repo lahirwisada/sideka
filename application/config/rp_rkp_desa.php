@@ -24,9 +24,19 @@ $config['rp_rkp_desa'] = array(
         'jumlah_biaya' => array('Jumlah Biaya', 80, TRUE, 'right', 2),
         'pelaksanaan_swakelola' => array('Swakelola', 100, TRUE, 'center', 2),
         'pelaksanaan_kerjasama_antar_desa' => array('Kerjasama<br />Antar Desa', 100, TRUE, 'center', 2),
-        'pelaksanaan_kerjasama_pihak_ketiga' => array('Kerjasama<br />Pihak Ketiga', 100, TRUE, 'center', 0),
+        'pelaksanaan_kerjasama_pihak_ketiga' => array('Kerjasama<br />Pihak Ketiga', 100, TRUE, 'center', 2),
+        'rencana_pelaksanaan_kegiatan' => array('Rencana<br />Pelakasanaan<br />Kegiatan', 100, TRUE, 'center', 2),
+        'aksi' => array('Aksi', 120, FALSE, 'center', 0)
     ),
-    'buttons' => NULL,
+    'buttons' => array(
+//        array('Select All', 'check', 'btn'),
+//        array('separator'),
+        array('Tambah Detail', 'add', 'btn'),
+        array('separator'),
+//        array('separator'),
+//        array('Delete Selected Items', 'delete', 'btn'),
+//        array('separator')
+    ),
     'gridParams' => array(
         'height' => 300,
         'width' => 855,
