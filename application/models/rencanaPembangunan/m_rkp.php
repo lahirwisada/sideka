@@ -114,7 +114,7 @@ class M_rkp extends CI_Model {
         return FALSE;
     }
 
-    public function save($id_rancangan_rpjm_desa = FALSE) {
+    public function save($id_rkp = FALSE) {
         /**
          * Error Number :
          * 0 : tidak ada post data sama sekali
@@ -125,7 +125,7 @@ class M_rkp extends CI_Model {
         $response = array(
             "post_data" => $this->post_data,
             "error_message" => "Tidak ada data yang dikirim.",
-            "inserted_id" => $id_rancangan_rpjm_desa,
+            "inserted_id" => $id_rkp,
             "error_number" => "0"
         );
 
@@ -139,11 +139,11 @@ class M_rkp extends CI_Model {
             $this->db->trans_begin();
             $this->db->trans_strict(FALSE);
 
-            if ($id_rancangan_rpjm_desa) {
+            if ($id_rkp) {
                 $response["error_message"] = "Perubahan ";
                 $response["error_number"] = "1.2";
 
-                $this->db->where($this->_table . '.id_rancangan_rpjm_desa', $id_rancangan_rpjm_desa);
+                $this->db->where($this->_table . '.id_rkp', $id_rkp);
                 $this->db->update($this->_table, $this->post_data);
             } else {
                 $response["error_message"] = "Data baru ";
@@ -166,8 +166,6 @@ class M_rkp extends CI_Model {
             }
             $this->db->trans_commit();
         }
-
-
 
         return $response;
     }
