@@ -257,7 +257,9 @@ class M_rancangan_rpjm_desa extends CI_Model {
                 'tbl_rp_m_rancangan_rpjm_desa.tahun_anggaran ';
 
         $this->db->select($select);
-        $this->db->order_by("ref_rp_coa.kode_rekening", "asc");
+        $this->db->order_by("ref_rp_coa_a.kode_rekening", "asc");
+        $this->db->order_by("ref_rp_coa_b.kode_rekening", "asc");
+        $this->db->order_by("ref_rp_coa_c.kode_rekening", "asc");
         $this->setJoin();
     }
 
@@ -283,7 +285,6 @@ class M_rancangan_rpjm_desa extends CI_Model {
 
         //Get contents
         $return['records'] = $this->db->get();
-//        echo $this->db->last_query();exit;
 
         //Build count query
         $this->db->select("count(" . $this->_table . ".id_rancangan_rpjm_desa) as record_count")->from($this->_table);
