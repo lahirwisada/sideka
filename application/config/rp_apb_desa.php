@@ -24,9 +24,18 @@ $config['rp_apb_desa'] = array(
         'kode_rekening' => array('Kode Rekening', 120, TRUE, 'left', 2),
         'deskripsi' => array('Uraian', 220, TRUE, 'center', 2),
         'anggaran' => array('Anggaran', 100, TRUE, 'right', 2),
-        'keterangan' => array('Keterangan', 220, TRUE, 'center', 0)
+        'keterangan' => array('Keterangan', 220, TRUE, 'center', 2),
+        'aksi' => array('Aksi', 120, FALSE, 'center', 0)
     ),
-    'buttons' => NULL,
+    'buttons' => array(
+//        array('Select All', 'check', 'btn'),
+//        array('separator'),
+        array('Tambah Detail', 'add', 'btn'),
+        array('separator'),
+//        array('separator'),
+//        array('Delete Selected Items', 'delete', 'btn'),
+//        array('separator')
+    ),
     'gridParams' => array(
         'height' => 300,
         'width' => 855,
