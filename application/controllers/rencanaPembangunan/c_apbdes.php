@@ -92,7 +92,8 @@ class C_apbdes extends C_baseRencanaPembangunan {
                     $row->kode_rekening,
                     $row->deskripsi,
                     rupiah_display($row->anggaran),
-                    $row->keterangan
+                    $row->keterangan,
+                    '<a  title="Ubah Data" href="' . base_url() . 'rencanaPembangunan/c_apbdes/add_detail/' . $id_m_apbdes . '/' . $row->id_apbdes . '" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></a>&nbsp;'
                 );
             }
         }
@@ -128,10 +129,8 @@ class C_apbdes extends C_baseRencanaPembangunan {
                 '<button type="submit" class="btn btn-info btn-xs" title="Tampil Detil APB Desa" onclick="show_detail_program(\'' . $row->id_m_apbdes . '\')"/>' .
                 '<i class="fa fa-list-alt"></i>' .
                 '</button>&nbsp;' .
-                /**
-                 * @todo Buat generate excel untuk rkp
-                 */
-                ('<a  title="Download Excel" href="#" onclick="download_excel(\'' . $row->id_m_apbdesa . '\')" class="btn btn-success btn-xs"><i class="fa fa-file-excel-o"></i></a>')
+                '<a  title="Ubah Data" href="' . base_url() . 'rencanaPembangunan/c_apbdes/add/' . $row->id_m_apbdes . '" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></a>&nbsp;'
+                    //('<a  title="Download Excel" href="#" onclick="download_excel(\'' . $row->id_m_apbdesa . '\')" class="btn btn-success btn-xs"><i class="fa fa-file-excel-o"></i></a>')
             );
         }
         //Print please
@@ -139,8 +138,8 @@ class C_apbdes extends C_baseRencanaPembangunan {
     }
 
     function add($id_m_apbdes = FALSE) {
-//        $master_rkp = $this->m_master_rkp->getArray(2027, FALSE, array());
-        $master_rkp = $this->m_master_rkp->getArray(date('Y') - 2, FALSE, array());
+        $master_rkp = $this->m_master_rkp->getArray(2016, 2089, array());
+//        $master_rkp = $this->m_master_rkp->getArray(date('Y') - 2, FALSE, array());
 
         $post_data = array();
         $attention_message = "";
@@ -148,18 +147,18 @@ class C_apbdes extends C_baseRencanaPembangunan {
             $this->m_master_apbdes->getPostData();
             $response = $this->m_master_apbdes->save($id_m_apbdes);
             $attention_message = $response["message_error"];
-            if ($response["error_number"] != '0' && $id_m_rkp) {
-                redirect('rencanaPembangunan/c_rkp');
-            } elseif ($response["error_number"] != '0' && !$id_m_rkp) {
-                redirect('rencanaPembangunan/c_rkp/add_detail');
+            if ($response["error_number"] != '0' && $id_m_apbdes) {
+                redirect('rencanaPembangunan/c_apbdes');
+            } elseif ($response["error_number"] != '0' && !$id_m_apbdes) {
+                redirect('rencanaPembangunan/c_apbdes/add_detail');
             }
             $post_data = $response["post_data"];
-        } elseif (count($_POST) == 0 && $id_m_rkp) {
-            $post_data = $this->m_master_apbdes->getDetail($id_m_rkp, TRUE);
+        } elseif (count($_POST) == 0 && $id_m_apbdes) {
+            $post_data = $this->m_master_apbdes->getDetail($id_m_apbdes, TRUE);
 
             if (!$post_data || empty($post_data)) {
                 $this->session->set_flashdata('attention_message', 'Maaf, Data tidak ditemukan.');
-                redirect('rencanaPembangunan/c_rkp', 'refresh');
+                redirect('rencanaPembangunan/c_apbdes', 'refresh');
             }
         }
 
@@ -190,8 +189,8 @@ class C_apbdes extends C_baseRencanaPembangunan {
         $attention_message = "";
 
 
-        if (!$id_m_apbdes || !$this->m_master_rkp->isIdValid($id_m_apbdes)) {
-            $this->session->set_flashdata('attention_message', 'Maaf, RPJM tidak ditemukan.');
+        if (!$id_m_apbdes || !$this->m_master_apbdes->isIdValid($id_m_apbdes)) {
+            $this->session->set_flashdata('attention_message', 'Maaf, APBDES tidak ditemukan.');
             redirect('rencanaPembangunan/c_apbdes', 'refresh');
         }
 
@@ -217,7 +216,7 @@ class C_apbdes extends C_baseRencanaPembangunan {
             }
             $post_data = $response["post_data"];
         } elseif (count($_POST) == 0 && $id_apbdes) {
-            $post_data = $this->m_rkp->getDetail($id_apbdes, TRUE);
+            $post_data = $this->m_apbdes->getDetail($id_apbdes, TRUE);
 
             if (!$post_data || empty($post_data)) {
                 $this->session->set_flashdata('attention_message', 'Maaf, Data tidak ditemukan.');
@@ -230,7 +229,7 @@ class C_apbdes extends C_baseRencanaPembangunan {
             $this->session->set_flashdata('attention_message', 'Maaf, Data tidak ditemukan.');
             redirect('rencanaPembangunan/c_apbdes', 'refresh');
         }
-        
+
         $master_rpjm_desa = $this->m_master_rancangan_rpjm_desa->getDetail($detail_master_rkp->id_m_rancangan_rpjm_desa);
         $and_tahun_pelaksanaan = FALSE;
         if ($master_rpjm_desa) {
@@ -250,6 +249,7 @@ class C_apbdes extends C_baseRencanaPembangunan {
         $this->set('attention_message', $attention_message);
         $this->set('id_m_apbdes', $id_m_apbdes);
         $this->set('id_apbdes', $id_apbdes);
+        $this->set('post_data', $post_data);
 
         $this->set('top_level_coa', $top_level_coa);
         $this->set('deskripsi_title', 'Detail RKP Desa');

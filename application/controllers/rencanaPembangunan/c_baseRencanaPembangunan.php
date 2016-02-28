@@ -156,10 +156,21 @@ class C_baseRencanaPembangunan extends CI_Controller {
 
     public function select_coa() {
         $keyword = $this->input->post('keyword', TRUE);
+        
+        $initEdit = $this->input->post('initEdit');
+        
+        $term = $keyword;
+        if(!$initEdit){
+            $term = $keyword['term'];
+        }
+        
         $id_top_coa = $this->input->post('id_top_coa', TRUE);
         $inp = $this->input->post('inp', TRUE);
         $where_top_coa = 'id_top_coa = ' . $id_top_coa;
-        $rows = $this->m_coa->getCoaForInputSelect($keyword['term'], $where_top_coa);
+        
+//        var_dump($term, $where_top_coa);exit;
+        $rows = $this->m_coa->getCoaForInputSelect($term, $where_top_coa, $initEdit);
+        
         if ($inp == 'select2') {
             return $this->to_json(array("results" => $rows), FALSE);
         }
