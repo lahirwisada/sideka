@@ -99,7 +99,7 @@ echo $attention_message ? '<p class="message">' . $attention_message . '</p>' : 
     <label class="col-md-3 control-label" for="sumber_dana"> Sumber Dana *</label>
     <div class="col-md-9">
         <select name="id_sumber_dana_desa" id="sumber_dana">
-            <option></option>>
+            <option></option>
         </select>
         <span class="help-block">
             <div class="dvAlert"></div>
@@ -166,7 +166,7 @@ echo isset($js_general_helper) ? $js_general_helper : '';
 
             var formvalid = true;
             if (formvalid) {
-                if (confirm("Mohon tetap di halaman ini ketika proses sedang berjalan.\nProses Akan berhenti ketika anda berpindah halaman.\nAnda yakin akan mengimpor file ini ? ")) {
+                if (confirm("Mohon tetap di halaman ini ketika proses sedang berjalan.\nProses Akan berhenti ketika anda berpindah halaman.\nAnda yakin akan melanjutkan ? ")) {
                     $(this).attr("disabled", true);
                     $(this).attr("value", "Tunggu .. ");
 
@@ -190,5 +190,34 @@ echo isset($js_general_helper) ? $js_general_helper : '';
             placeholder: "Pilih Sumber Dana",
             data: sumberDana
         });
+
+
+<?php if (!empty($post_data)): ?>
+            $("#sumber_dana").val("<?php echo $post_data["id_sumber_dana_desa"]; ?>").trigger("change");
+
+            $("#jenis_kegiatan").val("<?php echo $post_data["id_coa"]; ?>").trigger("change");
+
+
+    <?php
+    foreach (array(
+"tahun_pelaksanaan_1",
+ "tahun_pelaksanaan_2",
+ "tahun_pelaksanaan_3",
+ "tahun_pelaksanaan_4",
+ "tahun_pelaksanaan_5",
+ "tahun_pelaksanaan_6",
+ "swakelola",
+ "kerjasama_antar_desa",
+ "kerjasama_pihak_ketiga",
+    ) as $inp_check) {
+        if (!is_null($post_data[$inp_check]) && $post_data[$inp_check] != FALSE):
+            echo "setCheck('" . $inp_check . "');";
+        else:
+            echo "remCheck('" . $inp_check . "');";
+        endif;
+    }
+    ?>
+
+<?php endif; ?>
     });
 </script>

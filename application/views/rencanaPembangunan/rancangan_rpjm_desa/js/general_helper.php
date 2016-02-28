@@ -50,22 +50,31 @@
         }
         return permArr;
     }
-    
-    function select2matcher(term, text) { 
 
-                if (term.length == 0) return true;
-                texts = text.split(" ");
+    function select2matcher(term, text) {
 
-                allCombinations = permute(texts, [], []);
+        if (term.length == 0)
+            return true;
+        texts = text.split(" ");
 
-                for(i in allCombinations){
-                    if( allCombinations[i].join(" ").toUpperCase().indexOf(term.toUpperCase())==0 ){
-                        return true;
-                    }
-                }
+        allCombinations = permute(texts, [], []);
 
-                return false;
+        for (i in allCombinations) {
+            if (allCombinations[i].join(" ").toUpperCase().indexOf(term.toUpperCase()) == 0) {
+                return true;
+            }
+        }
 
+        return false;
+
+    }
+
+    function setCheck(id) {
+        $("#" + id).attr("checked", "checked");
+    }
+
+    function remCheck(id) {
+        $("#" + id).removeAttr("checked");
     }
 
 </script>

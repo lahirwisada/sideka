@@ -1,5 +1,6 @@
 <?php
 $attention_message = isset($attention_message) && $attention_message ? $attention_message : FALSE;
+$id_m_rancangan_rpjm_desa = isset($id_m_rancangan_rpjm_desa) && $id_m_rancangan_rpjm_desa ? $id_m_rancangan_rpjm_desa : 0;
 ?>
 <link href="<?= $this->config->item('base_url'); ?>css/flexigrid.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?= $this->config->item('base_url'); ?>js/jquery.pack.js"></script>
@@ -23,22 +24,6 @@ echo $js_grid;
 <script type="text/javascript">
     var _base_url = '<?= base_url() ?>';
 
-    function edit_rpjmd(id) {
-        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/edit/' + id;
-    }
-
-    function add_sub_program(id) {
-        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/add_sub_program/' + id;
-    }
-
-    function show_detail_program(id) {
-        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/show_detail_program/' + id;
-    }
-
-    function show_tree_rpjmd(id) {
-        window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/show_tree_rpjmd/' + id;
-    }
-
     function btn(com, grid)
     {
         if (com == 'Select All')
@@ -51,9 +36,9 @@ echo $js_grid;
             $('.bDiv tbody tr', grid).removeClass('trSelected');
         }
 
-        if (com == 'Add')
+        if (com == 'Tambah Detail')
         {
-            window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/add';
+            window.location = _base_url + 'rencanaPembangunan/c_rancangan_rpjm_desa/add_detail/<?php echo $id_m_rancangan_rpjm_desa; ?>';
         }
 
         if (com == 'Delete Selected Items')
