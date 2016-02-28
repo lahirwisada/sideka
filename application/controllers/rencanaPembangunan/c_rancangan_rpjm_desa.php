@@ -38,6 +38,7 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
         $this->lists($id);
 
         $attention_message = $this->session->flashdata('attention_message');
+        $this->set('id_m_rancangan_rpjm_desa', $id);
         $this->set('attention_message', $attention_message);
     }
 
@@ -74,7 +75,8 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
                 $row->sumber_biaya,
                 ($row->swakelola != 0 ? '<i class="fa fa-check"></i>' : ' '),
                 ($row->kerjasama_antar_desa != 0 ? '<i class="fa fa-check"></i>' : ' '),
-                ($row->kerjasama_pihak_ketiga != 0 ? '<i class="fa fa-check"></i>' : ' ')
+                ($row->kerjasama_pihak_ketiga != 0 ? '<i class="fa fa-check"></i>' : ' '),
+                '<a  title="Ubah Detil RPJM" href="' . base_url() . 'rencanaPembangunan/c_rancangan_rpjm_desa/add_detail/'.$row->id_m_rancangan_rpjm_desa.'/'.$row->id_rancangan_rpjm_desa.'" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></a>&nbsp;'
             );
         }
         //Print please
@@ -150,6 +152,7 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
                 /**
                  * @todo Buat generate excel untuk rpjm
                  */
+                '<a  title="Ubah Data Master RPJM Tahun Anggaran '.$row->tahun_anggaran.'" href="' . base_url() . 'rencanaPembangunan/c_rancangan_rpjm_desa/add/'.$row->id_m_rancangan_rpjm_desa.'" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></a>&nbsp;' .
                 '<a  title="Download Excel" href="' . base_url() . 'rencanaPembangunan/c_rancangan_rpjm_desa/export_excel/'.$row->id_m_rancangan_rpjm_desa.'" class="btn btn-success btn-xs"><i class="fa fa-file-excel-o"></i></a>'
             );
         }
@@ -398,7 +401,12 @@ class C_rancangan_rpjm_desa extends C_baseRencanaPembangunan {
             $this->session->set_flashdata('attention_message', 'Maaf, Data tidak ditemukan.');
             redirect('rencanaPembangunan/c_rancangan_rpjm_desa', 'refresh');
         }
+        
+//        var_dump($post_data);exit;
+//        var_dump((!is_null($post_data["kerjasama_antar_desa"]) && $post_data["kerjasama_antar_desa"] != FALSE));
+//        var_dump(!is_null($post_data["kerjasama_pihak_ketiga"]) && $post_data["kerjasama_pihak_ketiga"] != FALSE);exit;
 
+        $this->set('post_data', $post_data);
         $this->set('js_general_helper', $this->load->view('rencanaPembangunan/rancangan_rpjm_desa/js/general_helper', array(), TRUE));
         $this->set('deskripsi_title', 'Formulir Detail RPJM Desa');
         $this->set('attention_message', $attention_message);
