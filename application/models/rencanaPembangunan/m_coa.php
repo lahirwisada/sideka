@@ -60,7 +60,8 @@ class M_coa extends CI_Model {
         )->from($this->_table);
         $this->db->where('ref_rp_coa.id_coa', $id);
         $this->db->or_where('ref_rp_coa.id_top_coa', $id);
-        $this->db->order_by('ref_rp_coa.id_parent_coa ', null);
+//        $this->db->order_by('ref_rp_coa.id_parent_coa ', null);
+        $this->db->order_by('ref_rp_coa.kode_rekening ', null);
         $this->db->group_by('ref_rp_coa.id_coa ', null);
         $this->CI->flexigrid->build_query();
 
