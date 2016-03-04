@@ -172,7 +172,8 @@ class C_coa extends CI_Controller {
                     $row->level,
                     '<button type="submit" class="btn btn-success btn-xs" title="Tambah Sub Kode_rekening" onclick="add_sub_coa(\'' . $row->id_coa . '\')"/><i class="fa fa-plus-square"></i></button>'
                 );
-            } else if ($row->level == 4) {
+            } 
+            else if ($row->level > 6) {
                 $record_items[] = array(
                     $row->id_coa,
                     $row->id_coa,
@@ -184,7 +185,8 @@ class C_coa extends CI_Controller {
                     '<button type="submit" class="btn btn-default btn-xs" title="Edit" onclick="edit_coa(\'' . $row->id_coa . '\')"/><i class="fa fa-pencil"></i></button>
 				'
                 );
-            } else
+            }
+            else
                 $record_items[] = array(
                     $row->id_coa,
                     $row->id_coa,
