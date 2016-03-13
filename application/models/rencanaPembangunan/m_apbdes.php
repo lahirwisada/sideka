@@ -137,25 +137,42 @@ class M_apbdes extends CI_Model {
         return $response;
     }
 
-    private function _setSelectAndJoin() {
+    private function __setSelect($additional_select = FALSE) {
         $select = $this->_table . '.' . $this->_primary_key . ', ' .
                 $this->_table . '.id_m_apbdes, ' .
                 $this->_table . '.id_top_coa, ' .
                 $this->_table . '.id_coa, ' .
                 $this->_table . '.anggaran, ' .
-                $this->_table . '.keterangan, ' .
-                'ref_rp_coa_a.deskripsi as grup_coa, ' .
-                'CONCAT(ref_rp_coa_b.kode_rekening, \' - \', ref_rp_coa_b.deskripsi) as kode_rekening ';
+                $this->_table . '.keterangan';
 
         $this->db->select($select, FALSE);
 
+        if ($additional_select && is_array($additional_select)) {
+            $this->db->select($additional_select[0], $additional_select[1]);
+        } elseif ($additional_select && !is_array($additional_select)) {
+            $this->db->select($additional_select);
+        }
+    }
+
+    private function _order_by_kode_rekening($table_coa_alias = 'ref_rp_coa_b') {
+        $this->db->order_by($table_coa_alias . ".kode_rekening", "asc");
+    }
+
+    private function _setSelectAndJoin() {
+        $select = 'ref_rp_coa_a.deskripsi as grup_coa, ' .
+                'CONCAT(ref_rp_coa_b.kode_rekening, \' - \', ref_rp_coa_b.deskripsi) as kode_rekening ';
+
+        $this->__setSelect(array($select, FALSE));
+
         $this->db->join('ref_rp_coa ref_rp_coa_a', 'ref_rp_coa_a.id_coa = ' . $this->_table . '.id_top_coa');
         $this->db->join('ref_rp_coa ref_rp_coa_b', 'ref_rp_coa_b.id_coa = ' . $this->_table . '.id_coa');
+
+        $this->_order_by_kode_rekening();
     }
 
     function getArray() {
 
-        $this->_setSelectAndJoin();
+        $this->__setSelect();
 
         $q = $this->db->get($this->_table);
         $rs = FALSE;
@@ -172,7 +189,7 @@ class M_apbdes extends CI_Model {
         }
         return $arr_result;
     }
-    
+
     public function reCalculateSubTotal($id_m_apbdes = FALSE, $id_top_coa = FALSE) {
 
         if ($id_top_coa && $id_m_apbdes) {
@@ -188,7 +205,7 @@ class M_apbdes extends CI_Model {
         return FALSE;
     }
 
-    public function getFlexigrid() {
+    public function getFlexigrid($id_m_apbdes) {
         //Build contents query
 
         $this->_setSelectAndJoin();
@@ -196,6 +213,8 @@ class M_apbdes extends CI_Model {
         $this->db->from($this->_table);
         //$this->db->where('tbl_rp_rpjmd.id_rpjmd !=', 0);
         //$this->db->join('tbl_rp_rpjmd as a1','a1.id_parent_rpjmd = tbl_rp_rpjmd.id_rpjmd', 'left');
+
+        $this->db->where($this->_table . '.id_m_apbdes', $id_m_apbdes);
         $this->ci->flexigrid->build_query();
 
         //Get contents
@@ -204,6 +223,9 @@ class M_apbdes extends CI_Model {
         //Build count query
         $this->db->join('ref_rp_coa ref_rp_coa_a', 'ref_rp_coa_a.id_coa = ' . $this->_table . '.id_top_coa');
         $this->db->join('ref_rp_coa ref_rp_coa_b', 'ref_rp_coa_b.id_coa = ' . $this->_table . '.id_coa');
+
+        $this->db->where($this->_table . '.id_m_apbdes', $id_m_apbdes);
+
         $this->db->select("count(" . $this->_table . "." . $this->_primary_key . ") as record_count")->from($this->_table);
 
         $this->ci->flexigrid->build_query(FALSE);
@@ -215,6 +237,50 @@ class M_apbdes extends CI_Model {
 
         //Return all
         return $return;
+    }
+
+    public function getExcelRecordByIdMasterApbdes($id_m_apbdes = FALSE, $tahun_pelaksanaan = FALSE) {
+        $grouped_apbdes_by_top_level_coa = FALSE;
+        if ($id_m_apbdes) {
+
+            $top_level_coa = $this->m_coa->getTopLevelCoa();
+
+            if (!$top_level_coa) {
+                return $grouped_apbdes_by_top_level_coa;
+            }
+
+            $grouped_apbdes_by_top_level_coa = array();
+
+            if ($tahun_pelaksanaan) {
+                $this->db->where($tahun_pelaksanaan);
+            }
+
+            foreach ($top_level_coa as $record_top_level_coa) {
+
+                $select = 'node.kode_rekening, node.level, node.id_top_coa, node.deskripsi as group_coa, node.kode_rekening, CONCAT(node.kode_rekening, \' - \', node.deskripsi) as kode_rekening_deskripsi ';
+
+                $this->__setSelect(array($select, FALSE));
+
+                $this->_order_by_kode_rekening("node");
+
+                $this->db->join("ref_rp_coa as parent", "parent.id_coa = node.id_parent_coa");
+                $this->db->join($this->_table, $this->_table . ".id_coa = node.id_coa and " . $this->_table . ".id_m_apbdes = " . $id_m_apbdes . " and " . $this->_table . ".id_top_coa = '" . $record_top_level_coa->id_coa . "'", "left");
+
+                $this->db->where('node.id_top_coa = ' . $record_top_level_coa->id_coa);
+
+                $q = $this->db->get("ref_rp_coa as node");
+                $rs = FALSE;
+                if ($q) {
+                    $rs = $q->result();
+
+                    if ($rs) {
+                        $grouped_apbdes_by_top_level_coa[$record_top_level_coa->id_coa] = $rs;
+                    }
+                    unset($rs, $q);
+                }
+            }
+        }
+        return $grouped_apbdes_by_top_level_coa;
     }
 
 }

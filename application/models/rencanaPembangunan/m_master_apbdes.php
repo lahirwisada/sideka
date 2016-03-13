@@ -19,7 +19,7 @@ class M_master_apbdes extends CI_Model {
     function __construct() {
         parent::__construct();
         $this->ci = get_instance();
-        
+
         $this->ci->config->load('rp_apb_desa');
         $this->array_total_bidang = $this->ci->config->item('array_total_top_coa');
     }
@@ -43,6 +43,7 @@ class M_master_apbdes extends CI_Model {
         $this->_setSelectAndJoin();
         $query = $this->db->get_where($this->_table, array($this->_table . "." . $this->_primary_key => $id));
 
+//        echo $this->db->last_query();exit;
         $detail = FALSE;
         if ($returnArray) {
             $detail = $query->row_array();
@@ -103,7 +104,7 @@ class M_master_apbdes extends CI_Model {
 
             $id = $id;
             if ($id) {
-                
+
 //                var_dump($this->post_data);exit;
                 $response["error_message"] = "Perubahan ";
                 $response["error_number"] = "1.2";
@@ -141,25 +142,34 @@ class M_master_apbdes extends CI_Model {
                 $this->_table . '.total_belanja, ' .
                 $this->_table . '.total_pembiayaan, ' .
                 $this->_table . '.tanggal_disetujui, ' .
-                $this->_table . '.disetujui_oleh ';
+                $this->_table . '.disetujui_oleh, ' .
+                'ref_desa.nama_desa, ' .
+                'ref_kecamatan.nama_kecamatan, ' .
+                'ref_kab_kota.nama_kab_kota, ' .
+                'ref_provinsi.nama_provinsi ';
 
         $this->db->select($select);
 
         $this->db->join('tbl_rp_m_rkp', 'tbl_rp_m_rkp.id_m_rkp = ' . $this->_table . '.' . $this->_primary_key);
+        $this->db->join('tbl_rp_m_rancangan_rpjm_desa', 'tbl_rp_m_rancangan_rpjm_desa.id_m_rancangan_rpjm_desa = tbl_rp_m_rkp.id_m_rancangan_rpjm_desa');
+        $this->db->join('ref_desa', 'ref_desa.id_desa = tbl_rp_m_rancangan_rpjm_desa.id_desa');
+        $this->db->join('ref_kecamatan', 'ref_kecamatan.id_kecamatan = tbl_rp_m_rancangan_rpjm_desa.id_kecamatan');
+        $this->db->join('ref_kab_kota', 'ref_kab_kota.id_kab_kota = tbl_rp_m_rancangan_rpjm_desa.id_kab_kota');
+        $this->db->join('ref_provinsi', 'ref_provinsi.id_provinsi = tbl_rp_m_rancangan_rpjm_desa.id_provinsi');
     }
-    
+
     public function setSubTotal($id_m_apbdes = FALSE, $id_top_coa = FALSE, $sub_total = NULL) {
         if ($id_m_apbdes) {
-            
+
             $selected_field_name = NULL;
             if ($id_top_coa) {
-                
+
                 $this->load->model('rencanaPembangunan/m_coa');
                 $arr_id_top_coa = $this->m_coa->getIdFromConfig('rp_apb_desa', 'array_total_top_coa');
-                
+
                 $this->array_total_bidang = array_combine($arr_id_top_coa, array_values($this->array_total_bidang));
 //                unset($arr_id_top_coa);
-                
+
                 $data = array(
                     $this->array_total_bidang[$id_top_coa] => $sub_total
                 );
