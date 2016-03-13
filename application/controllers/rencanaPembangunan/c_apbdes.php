@@ -92,7 +92,6 @@ class C_apbdes extends C_baseRencanaPembangunan {
                     $row->id_m_apbdes,
                     $row->id_coa,
                     $row->kode_rekening,
-                    $row->deskripsi,
                     rupiah_display($row->anggaran),
                     $row->keterangan,
                     '<a  title="Ubah Data" href="' . base_url() . 'rencanaPembangunan/c_apbdes/add_detail/' . $id_m_apbdes . '/' . $row->id_apbdes . '" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></a>&nbsp;'

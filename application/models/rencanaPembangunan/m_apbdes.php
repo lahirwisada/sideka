@@ -39,6 +39,10 @@ class M_apbdes extends CI_Model {
         foreach ($this->form_field_names as $key => $field_name) {
             if ($this->input->post($field_name)) {
                 $this->post_data[$field_name] = addslashes($this->input->post($field_name));
+            }else{
+                if($field_name == 'keterangan'){
+                    $this->post_data[$field_name] = '-';
+                }
             }
         }
 
@@ -111,8 +115,10 @@ class M_apbdes extends CI_Model {
             if ($id) {
                 $response["error_message"] = "Perubahan ";
                 $response["error_number"] = "1.2";
-
+                
                 $this->update($this->post_data, $id);
+                
+                
             } else {
                 $response["error_message"] = "Data baru ";
                 $response["error_number"] = "1.1";
